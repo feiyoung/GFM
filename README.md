@@ -1,0 +1,2 @@
+# RGFM
+Generalized factor model
