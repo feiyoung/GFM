@@ -21,4 +21,4 @@ Besides, this package also has the MATLAB version at [https://github.com/feiyoun
 
 # Demonstration
 
-For an example of typical GFM usage, please see our [Package vignette](https://feiyoung.github.io/GFM/index.html) for a demonstration and overview of the functions included in GFM.
+For an example of typical GFM usage, please see our [Package vignette](https://feiyoung.github.io/GFM/docs/index.html) for a demonstration and overview of the functions included in GFM.
