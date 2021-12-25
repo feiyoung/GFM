@@ -12,7 +12,7 @@ To install the the packages "GFM", firstly, install the 'remotes' package.
 install.packages("remotes")
 remotes::install_github("feiyoung/RGFM")
 ```
-Besides, this package also has the MATLAB version at \url{https://github.com/feiyoung/GFM}, which runs faster in MATLAB environment.
+Besides, this package also has the MATLAB version at [https://github.com/feiyoung/GFM](https://github.com/feiyoung/GFM), which runs faster in MATLAB environment.
 
 # Demonstration
 
