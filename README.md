@@ -7,12 +7,17 @@ Please see our new paper for model details:
 
 # Installation
 
-To install the the packages "GFM", firstly, install the 'remotes' package.
+To install the the packages 'GFM' from 'Github', firstly, install the 'remotes' package.
 ```{Rmd}
 install.packages("remotes")
-remotes::install_github("feiyoung/RGFM")
+remotes::install_github("feiyoung/GFM")
 ```
-Besides, this package also has the MATLAB version at [https://github.com/feiyoung/GFM](https://github.com/feiyoung/GFM), which runs faster in MATLAB environment.
+Or install the the packages "GFM" from 'CRAN'
+```{Rmd}
+install.packages("GFM")
+```
+
+Besides, this package also has the MATLAB version at [https://github.com/feiyoung/GFM](https://github.com/feiyoung/MGFM), which runs faster in MATLAB environment.
 
 # Demonstration
 

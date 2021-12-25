@@ -24,11 +24,11 @@ The package can be installed with the command:
 
 `library(remotes)`
 
-`remotes::install_github("feiyoung/RGFM")`
+`remotes::install_github("feiyoung/GFM")`
 
 or
 
-`installed.packages("GFM")`
+`install.packages("GFM")`
 
 The package can be loaded with the command:
 ```{r  eval=TRUE}

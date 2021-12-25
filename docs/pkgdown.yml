@@ -2,7 +2,8 @@ pandoc: 2.7.2
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
+  GFM.Brain: GFM.Brain.html
   GFM.Simu: GFM.Simu.html
   RGFM: RGFM.html
-last_built: 2021-12-24T14:47Z
+last_built: 2021-12-25T11:10Z
 
