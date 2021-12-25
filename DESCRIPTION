@@ -1,0 +1,34 @@
+Package: GFM
+Type: Package
+Title: Generalized Factor Model
+Version: 1.1.0
+Date: 2021-12-24
+License: GPL-3
+Authors@R: 
+    c(person(given = "Wei",
+             family = "Liu",
+             role = c("aut", "cre"),
+             email = "weiliu@smail.swufe.edu.cn"),
+      person(given = "Huazhen",
+             family = "Lin",
+             role = "aut"),
+      person(given = "Shurong",
+             family = "Zheng",
+             role = "aut"),
+      person(given = "Jin",
+             family = "Liu",
+             role = "aut"))
+Author: Wei Liu [aut, cre], Huazhen Lin [aut], Shurong Zheng [aut], Jin Liu [aut]
+Maintainer: Wei Liu <weiliu@smail.swufe.edu.cn>
+Description:  Generalized factor model for ultra-high dimensional variables with mixed types.
+    We develop a two-step iterative procedure so that each update can be 
+    carried out parallelly across all variables and samples. The fast 
+    computation version is provided for ultra-high dimensional data,
+    see examples for more details. More details can be referred to 
+    Wei Liu, Huazhen Lin, Shurong Zheng and Jin Liu. (2021) <doi:https://doi.org/10.1080/01621459.2021.1999818>. 
+Depends: doSNOW, parallel
+VignetteBuilder: 
+    knitr
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
