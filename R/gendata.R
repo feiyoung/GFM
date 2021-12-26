@@ -37,15 +37,15 @@ gendata <- function(seed=1, n=300, p=50, type='homonorm', q=6, rho=1){
   mu0 <- 0.4 * rnorm(p)
   Bm0 <- cbind(mu0, B0)
   set.seed(seed)
-  H <- MASS::mvrnorm(n, mu=rep(0,q), cor.mat(q, 0.5))
+  H <-  mvrnorm(n, mu=rep(0,q), cor.mat(q, 0.5))
   svdH <- svd(cov(H))
   H0 <- scale(H,scale=F) %*% svdH$u %*% Diag(1/sqrt(svdH$d)) %*% svdH$v
 
 if(type == 'homonorm'){
-  X <- H0 %*% t(B0) + matrix(mu0, n,p, byrow=T) + MASS::mvrnorm(n, rep(0,p), diag(p))
+  X <- H0 %*% t(B0) + matrix(mu0, n,p, byrow=T) +  mvrnorm(n, rep(0,p), diag(p))
 }else if(type == 'heternorm'){
   sigmas = 0.1 + 4* runif(p)
-  X <- H0 %*% t(B0) + matrix(mu0, n,p, byrow=T) + MASS::mvrnorm(n, rep(0,p), diag(sigmas))
+  X <- H0 %*% t(B0) + matrix(mu0, n,p, byrow=T) +  mvrnorm(n, rep(0,p), diag(sigmas))
 }else if(type == 'pois'){
   g1 <- 1:p
   B0[g1, ] <- B0[g1, ]/ max(B0[g1, ]) * factor_term

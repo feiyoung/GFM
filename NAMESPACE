@@ -1,2 +1,11 @@
 export(gfm, singleIC,  Factorm,
        measurefun, gendata)
+
+importFrom(MASS, mvrnorm)
+importFrom("stats", "binomial", "cancor", "cov", "dpois", "gaussian",
+             "glm.fit", "poisson", "rbinom", "rnorm", "rpois", "runif",
+             "var")
+importFrom("utils", "setTxtProgressBar", "txtProgressBar")
+# importFrom("foreach", "foreach")
+import(parallel)
+import(doSNOW)

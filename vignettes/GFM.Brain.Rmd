@@ -4,7 +4,7 @@ author: "Wei Liu"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{GFM Real example}
+  %\VignetteIndexEntry{GFM: A Simple Transcriptomics Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,15 +18,15 @@ knitr::opts_chunk$set(
 
 ### Load real data
 First, we load the 'GFM' package and the real data which can be downloaded at 'here' (https://pan.baidu.com/s/1ralmQYqcW3XatLHbBrMXEw) and extraction code being 'sppy'. This data is in the format of '.Rdata' that inludes a gene expression matrix 'X' with 3460 rows (cells) and 2000 columns (genes), a vector 'group' specifying two groups of variable types ('type' variable) including 'gaussian' and 'poisson' and a vector 'y' meaning the clusters of cells annotated by experts. We compare the performance of 'GFM' and 'LFM' in downstream clustering analysis based on the benchchmarked clusters 'y'.
-```{r}
+```{r  eval=FALSE}
 library("GFM")
-load("D:\\Dropbox\\MixImpute\\Rcode\\RealData\\BrainSTdata\\Brain76.Rdata")
-ls() # check the variables
+#load("D:\\Dropbox\\MixImpute\\Rcode\\RealData\\BrainSTdata\\Brain76.Rdata")
+#ls() # check the variables
 ```
 
 ### Fit GFM model
 We fit the GFM model using 'gfm' function.
-```{r}
+```{r  eval=FALSE}
 q <- 15
 gfm1 <- gfm(X, group, type, q= q, output = FALSE)
 
@@ -34,7 +34,7 @@ gfm1 <- gfm(X, group, type, q= q, output = FALSE)
 
 ### Compare with LFM in downstream analysis
 We conduct the clustering analysis based on the extracted factors by GFM and evaluate the adjusted rand index (ARI) value based on the annotated cluster labels by experts. 
-```{r}
+```{r  eval=FALSE}
 hH <- gfm1$hH
 library(mclust)
 set.seed(1)
@@ -44,7 +44,7 @@ ARI_gfm <- adjustedRandIndex(gmm1$classification, y)
 ```
 
 We fit linear factor model using same number of factors.
-```{r}
+```{r  eval=FALSE}
 fac <- Factorm(X, q=15)
 hH_lfm <- fac$hH
 set.seed(1)
@@ -54,7 +54,7 @@ ARI_lfm <- adjustedRandIndex(gmm2$classification, y)
 ```
 
 Compare with the ARIs by visualization.
-```{r}
+```{r  eval=FALSE}
 library(ggplot2)
 df1 <- data.frame(ARI= c(ARI_gfm,ARI_lfm),
                     Method =factor(c('GFM', "LFM")))

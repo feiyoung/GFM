@@ -4,7 +4,7 @@ author: "Wei Liu"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{GFM Simulation}
+  %\VignetteIndexEntry{GFM: installation and simulated example}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+
 
 
 
@@ -38,19 +39,19 @@ library("GFM")
 ## Fit GFM model using simulated data
 ### Generate data with  homogeneous  normal variables
 First, we generate the data with  homogeneous  normal variables.
-```{r  eval=TRUE}
+```{r  eval=FALSE}
 ## Homogeneous  normal variables
   dat <- gendata(q = 2, n=100, p=100, rho=3)
 ```
 Then, we set the algorithm parameters and fit model
-```{r}
+```{r eval=FALSE}
 # full-one vector means there is only one variable type within all variables.
   group <- rep(1,ncol(dat$X)) 
 # set variables' type, 'gaussian' means there is  continous variable type.
   type <- 'gaussian' 
 ```
 Third, we fit the GFM model with user-specified number of factors.
-```{r}
+```{r  eval=FALSE}
 # specify q=2
   gfm1 <- gfm(dat$X, group, type, q=2, output = FALSE)
   
@@ -59,7 +60,7 @@ Third, we fit the GFM model with user-specified number of factors.
   measurefun(gfm1$hB, dat$B0, type='ccor')
 ```
 The number of factors can also be determined by data-driven manners.
-```{r}
+```{r  eval=FALSE}
 # select q automatically
   gfm2 <- gfm(dat$X, group, type, q=NULL, q_set = 1:6, output = FALSE)
 # measure the performance of GFM estimators in terms of canonical correlations
@@ -70,14 +71,14 @@ The number of factors can also be determined by data-driven manners.
 
 ### Generate data with  heterogeous normal variables
 First, we generate the data with  heterogeous  normal variables and set the parameters of algorithm.
-```{r  eval=TRUE}
+```{r  eval=FALSE}
   dat <- gendata(seed=1, n=100, p=100, type='heternorm', q=2, rho=1)
   group <- rep(1,ncol(dat$X))
   type <- 'gaussian'
 ```
 
 Third, we fit the GFM model with user-specified number of factors and compare the results with that of linear factor models.
-```{r}
+```{r  eval=FALSE}
 # specify q=2
   gfm1 <- gfm(dat$X, group, type, q=2, output = FALSE)
   
@@ -97,7 +98,7 @@ Third, we fit the GFM model with user-specified number of factors and compare th
 ```
 
 The number of factors can also be determined by data-driven manners.
-```{r}
+```{r  eval=FALSE}
 # select q automatically
   gfm2 <- gfm(dat$X, group, type, q=NULL, q_set = 1:4, output = FALSE)
 # measure the performance of GFM estimators in terms of canonical correlations
@@ -113,7 +114,7 @@ The number of factors can also be determined by data-driven manners.
 
 ### Generate data with  Count(Poisson) variables
 First, we generate the data with  Count(Poisson) variables and set the parameters of algorithm.
-```{r  eval=TRUE}
+```{r  eval=FALSE}
   q <- 3; p <- 200
   dat <- gendata(seed=1, n=200, p=p, type='pois', q=q, rho=4)
   group <- rep(1,ncol(dat$X))
@@ -121,13 +122,13 @@ First, we generate the data with  Count(Poisson) variables and set the parameter
 ```
 
 Second, we we fit the GFM models in the parallel manner. 
-```{r}
+```{r  eval=FALSE}
   system.time(
     gfm2 <- gfm(dat$X, group, type,parallel = TRUE, q=NULL, q_set = 1:4, output = FALSE, fast_version = TRUE))
 ```
 
 Third, we compare the results with that of linear factor models.
-```{r}
+```{r  eval=FALSE}
 
   # measure the performance of GFM estimators in terms of canonical correlations
   corH_gfm <- measurefun(gfm2$hH, dat$H0, type='ccor')
@@ -147,7 +148,7 @@ Third, we compare the results with that of linear factor models.
 
 ### Generate data with  the mixed-types of Poisson and Binomial variables
 First, we generate the data with  Count(Poisson) variables and set the parameters of algorithm. Then fit the GFM model with user-specified number of factors.
-```{r  eval=TRUE}
+```{r  eval=FALSE}
   dat <- gendata(seed=1, n=200, p=200, type='pois_bino', q=2, rho=2)
   group <- c(rep(1,ncol(dat$X)/2), rep(2,ncol(dat$X)/2))
   type <- c('poisson','binomial')
@@ -161,7 +162,7 @@ First, we generate the data with  Count(Poisson) variables and set the parameter
 
 
 Third, we compare the results with that of linear factor models.
-```{r}
+```{r  eval=FALSE}
   #  select q automatically
   gfm2 <- gfm(dat$X, group, type, dropout = 2, q=NULL, q_set = 1:4, output = FALSE)
   # measure the performance of GFM estimators in terms of canonical correlations
@@ -170,7 +171,7 @@ Third, we compare the results with that of linear factor models.
   
 ```
 Compare with linear factor models
-```{r}
+```{r  eval=FALSE}
   lfm1 <- Factorm(dat$X, q=3)
   corH_lfm <- measurefun(lfm1$hH, dat$H0, type='ccor')
   corB_lfm <- measurefun(lfm1$hB, dat$B0, type='ccor')

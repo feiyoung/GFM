@@ -8,10 +8,11 @@ gfm <- function(X, group, type, q=NULL, parallel=TRUE,para.type='doSNOW', ncores
 
   if(is.null(q)){
     if(parallel && para.type=='doSNOW'){
-      require(doSNOW)
+      #require(doSNOW)
+
       if(ncores >  parallel::detectCores() ) ncores <- parallel::detectCores()
       cl <- makeSOCKcluster(ncores) # 设定并行核
-      registerDoSNOW(cl) # 注册该核
+      doSNOW::registerDoSNOW(cl) # 注册该核
       nq <- length(q_set)
       pb <- txtProgressBar(min=1, max=nq, style=3)
       progress <- function(n) setTxtProgressBar(pb, n)
@@ -24,7 +25,7 @@ gfm <- function(X, group, type, q=NULL, parallel=TRUE,para.type='doSNOW', ncores
                           res
                         }
       close(pb)
-      stopCluster(cl)
+      parallel::stopCluster(cl)
 
     }else if(parallel && para.type=='parallel'){
       # varlist <- c('gfm_eval_intercept_init', 'ICriteria', "Factorm",
@@ -78,14 +79,14 @@ gfm <- function(X, group, type, q=NULL, parallel=TRUE,para.type='doSNOW', ncores
 
 }
 
-singleIC <- function(X, group, type, q_set=1:10, dropout=0, eps2=1e-4, maxIter=10,output=FALSE, fast_version=TRUE){
+singleIC <- function(X, group, type, q_set=1:10, dropout=0, dc_eps=1e-4, maxIter=10,output=FALSE, fast_version=TRUE){
   n <- nrow(X)
   q_num <- length(q_set)
   allhH <- list(); allhB <- list()
   for(r in 1:q_num){
 
     gfm1 <- gfm_eval_intercept_init(X, group, type, r,
-                                      dropout, eps2, maxIter, output)
+                                      dropout, dc_eps, maxIter, output)
     if(!fast_version){
         # hH <- gfm1$hH; hB <- gfm1$hB; hmu <- gfm1$hmu
       gfm1 <-gfm_eval_intercept_osfinal(X, gfm1$hH, gfm1$hB,gfm1$hmu, group, type)

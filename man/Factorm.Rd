@@ -5,10 +5,10 @@
   Factor analysis to extract latent linear factor and estimate loadings.
 }
 \usage{
-  Factorm(x, q=NULL)
+  Factorm(X, q=NULL)
 }
 \arguments{
-  \item{x}{a \code{n}-by-\code{p} matrix, the observed data}
+  \item{X}{a \code{n}-by-\code{p} matrix, the observed data}
   \item{q}{an integer between 1 and \code{p} or \code{NULL}, default as \code{NULL} and automatically choose q by the eigenvalue ratio method.}
 }
 
