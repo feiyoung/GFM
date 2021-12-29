@@ -26,6 +26,8 @@ Description:  Generalized factor model for ultra-high dimensional variables with
     computation version is provided for ultra-high dimensional data,
     see examples for more details. More details can be referred to 
     Wei Liu, Huazhen Lin, Shurong Zheng and Jin Liu. (2021) <doi:10.1080/01621459.2021.1999818>. 
+URL: https://github.com/feiyoung/GFM
+BugReports:   https://github.com/feiyoung/GFM/issues
 Depends: doSNOW, parallel,  R (>= 3.5.0)
 Imports: MASS, stats
 Suggests: knitr, rmarkdown
