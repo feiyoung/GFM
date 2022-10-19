@@ -2,9 +2,9 @@
 =========================================================================
 <!-- badges: start -->
 
-[![](https://www.r-pkg.org/badges/version-ago/ILSE)](https://cran.r-project.org/package=ILSE)
-[![](https://cranlogs.r-pkg.org/badges/ILSE?color=orange)](https://cran.r-project.org/package=ILSE)
-[![](https://cranlogs.r-pkg.org/badges/grand-total/ILSE?color=orange)](https://cran.r-project.org/package=ILSE)
+[![](https://www.r-pkg.org/badges/version-ago/GFM)](https://cran.r-project.org/package=GFM)
+[![](https://cranlogs.r-pkg.org/badges/GFM?color=orange)](https://cran.r-project.org/package=GFM)
+[![](https://cranlogs.r-pkg.org/badges/grand-total/GFM?color=orange)](https://cran.r-project.org/package=GFM)
 <!-- badges: end -->
 
 Generalized factor model for ultra-high dimensional variables with mixed types --R version
@@ -25,7 +25,7 @@ Or install the the packages "GFM" from 'CRAN'
 install.packages("GFM")
 ```
 
-Besides, this package also has the MATLAB version at [https://github.com/feiyoung/GFM](https://github.com/feiyoung/MGFM), which runs faster in MATLAB environment.
+Besides, this package also has the MATLAB version at [https://github.com/feiyoung/MGFM](https://github.com/feiyoung/MGFM), which runs faster in MATLAB environment.
 
 # Demonstration
 
