@@ -2,8 +2,13 @@ gfm <- function(X, group, type, q=NULL, parallel=TRUE,para.type='doSNOW', ncores
                 dropout=0, dc_eps=1e-4, maxIter=50,
                 q_set=1:10, output=TRUE, fast_version=FALSE){
   if(!is.matrix(X)) stop("X must be a matrix.")
-
+  if(ncol(X) != length(group)) stop("Length of group must be equal to ncol(X)!")
+  if((!is.null(q)) && (q<1) ) stop("q must be NULL or other positive integer!")
   n <- nrow(X); p <- ncol(X)
+  if(p <20) stop("ncol(X) must be at least no less than 20!")
+  if(n <20) stop("nrow(X) must be at least no less than 20!")
+  if(length(unique(group)) != length(type)) stop("The unique elements in group must have equal length as type!")
+
   omega <- 1/p
 
   if(is.null(q)){

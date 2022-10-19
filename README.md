@@ -1,4 +1,12 @@
 # GFM
+=========================================================================
+<!-- badges: start -->
+
+[![](https://www.r-pkg.org/badges/version-ago/ILSE)](https://cran.r-project.org/package=ILSE)
+[![](https://cranlogs.r-pkg.org/badges/ILSE?color=orange)](https://cran.r-project.org/package=ILSE)
+[![](https://cranlogs.r-pkg.org/badges/grand-total/ILSE?color=orange)](https://cran.r-project.org/package=ILSE)
+<!-- badges: end -->
+
 Generalized factor model for ultra-high dimensional variables with mixed types --R version
 
 Please see our new paper for model details:

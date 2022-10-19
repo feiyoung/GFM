@@ -11,6 +11,8 @@ signrevise <- function(A1, A2){
 
 Factorm <- function (X, q = NULL)
 {
+  if((!is.null(q)) && (q<1) ) stop("q must be NULL or other positive integer!")
+  if(!is.matrix(X)) stop("X must be a matrix.")
   X <- scale(X, scale=FALSE)
   n <- nrow(X)
   p <- ncol(X)
