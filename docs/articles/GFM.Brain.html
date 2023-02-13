@@ -96,7 +96,7 @@
 <div class="section level3">
 <h3 id="load-real-data">Load real data<a class="anchor" aria-label="anchor" href="#load-real-data"></a>
 </h3>
-<p>First, we load the ‘GFM’ package and the real data which can be downloaded <a href="xxx">here</a>. This data is in the format of ‘.Rdata’ that inludes a gene expression matrix ‘X’ with 3460 rows (cells) and 2000 columns (genes), a vector ‘group’ specifying two groups of variable types (‘type’ variable) including ‘gaussian’ and ‘poisson’ and a vector ‘y’ meaning the clusters of cells annotated by experts. We compare the performance of ‘GFM’ and ‘LFM’ in downstream clustering analysis based on the benchchmarked clusters ‘y’.</p>
+<p>First, we load the ‘GFM’ package and the real data which can be downloaded <a href="https://github.com/feiyoung/GFM/tree/main/vignettes_data" class="external-link">here</a>. This data is in the format of ‘.Rdata’ that inludes a gene expression matrix ‘X’ with 3460 rows (cells) and 2000 columns (genes), a vector ‘group’ specifying two groups of variable types (‘type’ variable) including ‘gaussian’ and ‘poisson’ and a vector ‘y’ meaning the clusters of cells annotated by experts. We compare the performance of ‘GFM’ and ‘LFM’ in downstream clustering analysis based on the benchchmarked clusters ‘y’.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">githubURL</span> <span class="op">&lt;-</span> <span class="st">"https://github.com/feiyoung/GFM/blob/main/vignettes_data/Brain76.Rdata?raw=true"</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="va">githubURL</span>,<span class="st">"Brain76.Rdata"</span>,mode<span class="op">=</span><span class="st">'wb'</span><span class="op">)</span></code></pre></div>
@@ -104,10 +104,41 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"Brain76.Rdata"</span><span class="op">)</span>
 <span class="va">XList</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">X</span><span class="op">[</span>,<span class="va">group</span><span class="op">==</span><span class="fl">1</span><span class="op">]</span>, <span class="va">X</span><span class="op">[</span>,<span class="va">group</span><span class="op">==</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>
-<span class="va">types</span> <span class="op">&lt;-</span> <span class="va">type</span></code></pre></div>
+<span class="va">types</span> <span class="op">&lt;-</span> <span class="va">type</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">XList</span><span class="op">)</span>
+<span class="co">#&gt; List of 2</span>
+<span class="co">#&gt;  $ : num [1:3460, 1:1000] 0 0 0 0 0 ...</span>
+<span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
+<span class="co">#&gt;   .. ..$ : chr [1:3460] "AAACAAGTATCTCCCA-1" "AAACAATCTACTAGCA-1" "AAACACCAATAACTGC-1" "AAACAGAGCGACTCCT-1" ...</span>
+<span class="co">#&gt;   .. ..$ : chr [1:1000] "logcount_ENSG00000187608" "logcount_ENSG00000179403" "logcount_ENSG00000162408" "logcount_ENSG00000049245" ...</span>
+<span class="co">#&gt;  $ : num [1:3460, 1:1000] 0 0 0 0 0 0 0 0 0 2 ...</span>
+<span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
+<span class="co">#&gt;   .. ..$ : chr [1:3460] "AAACAAGTATCTCCCA-1" "AAACAATCTACTAGCA-1" "AAACACCAATAACTGC-1" "AAACAGAGCGACTCCT-1" ...</span>
+<span class="co">#&gt;   .. ..$ : chr [1:1000] "count_ENSG00000187608" "count_ENSG00000179403" "count_ENSG00000162408" "count_ENSG00000049245" ...</span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/feiyoung/GFM" class="external-link">"GFM"</a></span><span class="op">)</span>
+<span class="co">#&gt; Loading required package: irlba</span>
+<span class="co">#&gt; Loading required package: Matrix</span>
+<span class="co">#&gt; Loading required package: doSNOW</span>
+<span class="co">#&gt; Loading required package: foreach</span>
+<span class="co">#&gt; Loading required package: iterators</span>
+<span class="co">#&gt; Loading required package: snow</span>
+<span class="co">#&gt; Loading required package: parallel</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'parallel'</span>
+<span class="co">#&gt; The following objects are masked from 'package:snow':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,</span>
+<span class="co">#&gt;     clusterExport, clusterMap, clusterSplit, makeCluster, parApply,</span>
+<span class="co">#&gt;     parCapply, parLapply, parRapply, parSapply, splitIndices,</span>
+<span class="co">#&gt;     stopCluster</span>
+<span class="co">#&gt; GFM :  Generalized factor model is implemented for ultra-high dimensional data with mixed-type variables.</span>
+<span class="co">#&gt; Two algorithms, variational EM and alternate maximization, are designed to implement the generalized factor model,</span>
+<span class="co">#&gt; respectively. The factor matrix and loading matrix together with the number of factors can be well estimated.</span>
+<span class="co">#&gt; This model can be employed in social and behavioral sciences, economy and finance, and  genomics,</span>
+<span class="co">#&gt; to extract interpretable nonlinear factors. More details can be referred to</span>
+<span class="co">#&gt; Wei Liu, Huazhen Lin, Shurong Zheng and Jin Liu. (2021) &lt;doi:10.1080/01621459.2021.1999818&gt;.   Check out our Package website (https://feiyoung.github.io/GFM/docs/index.html) for a more complete description of the methods and analyses</span>
 <span class="co">#load("vignettes_data\\Brain76.Rdata")</span>
 <span class="co">#ls() # check the variables</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span> <span class="co"># set a random seed for reproducibility.</span></code></pre></div>
@@ -120,7 +151,40 @@
 <code class="sourceCode R"><span class="va">q</span> <span class="op">&lt;-</span> <span class="fl">15</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span>
   <span class="va">gfm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gfm.html">gfm</a></span><span class="op">(</span><span class="va">XList</span>, <span class="va">types</span>, q<span class="op">=</span> <span class="va">q</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+<span class="op">)</span>
+<span class="co">#&gt; Starting the varitional EM algorithm...</span>
+<span class="co">#&gt; iter = 2, ELBO= -3750461.822684, dELBO=0.998254 </span>
+<span class="co">#&gt; iter = 3, ELBO= -3554311.076859, dELBO=0.052300 </span>
+<span class="co">#&gt; iter = 4, ELBO= -3415402.198187, dELBO=0.039082 </span>
+<span class="co">#&gt; iter = 5, ELBO= -3306452.039078, dELBO=0.031900 </span>
+<span class="co">#&gt; iter = 6, ELBO= -3217346.647111, dELBO=0.026949 </span>
+<span class="co">#&gt; iter = 7, ELBO= -3142460.123095, dELBO=0.023276 </span>
+<span class="co">#&gt; iter = 8, ELBO= -3078271.159787, dELBO=0.020426 </span>
+<span class="co">#&gt; iter = 9, ELBO= -3022409.845541, dELBO=0.018147 </span>
+<span class="co">#&gt; iter = 10, ELBO= -2973199.625335, dELBO=0.016282 </span>
+<span class="co">#&gt; iter = 11, ELBO= -2929410.835170, dELBO=0.014728 </span>
+<span class="co">#&gt; iter = 12, ELBO= -2890115.681500, dELBO=0.013414 </span>
+<span class="co">#&gt; iter = 13, ELBO= -2854597.557781, dELBO=0.012290 </span>
+<span class="co">#&gt; iter = 14, ELBO= -2822292.009491, dELBO=0.011317 </span>
+<span class="co">#&gt; iter = 15, ELBO= -2792747.001267, dELBO=0.010468 </span>
+<span class="co">#&gt; iter = 16, ELBO= -2765595.355226, dELBO=0.009722 </span>
+<span class="co">#&gt; iter = 17, ELBO= -2740535.120688, dELBO=0.009061 </span>
+<span class="co">#&gt; iter = 18, ELBO= -2717315.275484, dELBO=0.008473 </span>
+<span class="co">#&gt; iter = 19, ELBO= -2695725.110295, dELBO=0.007945 </span>
+<span class="co">#&gt; iter = 20, ELBO= -2675586.217373, dELBO=0.007471 </span>
+<span class="co">#&gt; iter = 21, ELBO= -2656746.357345, dELBO=0.007041 </span>
+<span class="co">#&gt; iter = 22, ELBO= -2639074.702982, dELBO=0.006652 </span>
+<span class="co">#&gt; iter = 23, ELBO= -2622458.107292, dELBO=0.006296 </span>
+<span class="co">#&gt; iter = 24, ELBO= -2606798.143554, dELBO=0.005971 </span>
+<span class="co">#&gt; iter = 25, ELBO= -2592008.733701, dELBO=0.005673 </span>
+<span class="co">#&gt; iter = 26, ELBO= -2578014.230523, dELBO=0.005399 </span>
+<span class="co">#&gt; iter = 27, ELBO= -2564747.853111, dELBO=0.005146 </span>
+<span class="co">#&gt; iter = 28, ELBO= -2552150.400275, dELBO=0.004912 </span>
+<span class="co">#&gt; iter = 29, ELBO= -2540169.184545, dELBO=0.004695 </span>
+<span class="co">#&gt; iter = 30, ELBO= -2528757.142764, dELBO=0.004493</span>
+<span class="co">#&gt; Finish the varitional EM algorithm...</span>
+<span class="co">#&gt;    user  system elapsed </span>
+<span class="co">#&gt;   72.44    4.25  149.42</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="compare-with-lfm-in-downstream-analysis">Compare with LFM in downstream analysis<a class="anchor" aria-label="anchor" href="#compare-with-lfm-in-downstream-analysis"></a>
@@ -129,6 +193,9 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">hH</span> <span class="op">&lt;-</span> <span class="va">gfm1</span><span class="op">$</span><span class="va">hH</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mclust-org.github.io/mclust/" class="external-link">mclust</a></span><span class="op">)</span>
+<span class="co">#&gt; Warning: package 'mclust' was built under R version 4.1.3</span>
+<span class="co">#&gt; Package 'mclust' version 5.4.10</span>
+<span class="co">#&gt; Type 'citation("mclust")' for citing this R package in publications.</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 <span class="va">gmm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mclust-org.github.io/mclust/reference/Mclust.html" class="external-link">Mclust</a></span><span class="op">(</span><span class="va">hH</span>, G<span class="op">=</span><span class="fl">7</span><span class="op">)</span>
 <span class="va">ARI_gfm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mclust-org.github.io/mclust/reference/adjustedRandIndex.html" class="external-link">adjustedRandIndex</a></span><span class="op">(</span><span class="va">gmm1</span><span class="op">$</span><span class="va">classification</span>, <span class="va">y</span><span class="op">)</span></code></pre></div>
@@ -142,9 +209,11 @@
 <p>Compare with the ARIs by visualization.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<span class="co">#&gt; Warning: package 'ggplot2' was built under R version 4.1.3</span>
 <span class="va">df1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>ARI<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">ARI_gfm</span>,<span class="va">ARI_lfm</span><span class="op">)</span>,
                     Method <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'GFM'</span>, <span class="st">"LFM"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">df1</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Method</span>, y<span class="op">=</span><span class="va">ARI</span>, fill<span class="op">=</span><span class="va">Method</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span>, stat<span class="op">=</span><span class="st">"identity"</span>,width <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
+<p><img src="GFM.Brain_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 </div>
   </div>
 

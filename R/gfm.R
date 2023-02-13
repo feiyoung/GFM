@@ -3,6 +3,7 @@
 # library(pkgdown)
 # build_site()
 # build_article('GFM.Simu')
+# build_article("GFM.Brain")
 gfm <- function(XList, types, q=10, offset=FALSE, dc_eps=1e-4, maxIter=30,
                 verbose = TRUE, algorithm=c("VEM", "Alternate_Maximization")){
 

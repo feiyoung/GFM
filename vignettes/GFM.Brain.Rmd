@@ -17,20 +17,21 @@ knitr::opts_chunk$set(
 ```
 
 ### Load real data
-First, we load the 'GFM' package and the real data which can be downloaded [here](xxx). This data is in the format of '.Rdata' that inludes a gene expression matrix 'X' with 3460 rows (cells) and 2000 columns (genes), a vector 'group' specifying two groups of variable types ('type' variable) including 'gaussian' and 'poisson' and a vector 'y' meaning the clusters of cells annotated by experts. We compare the performance of 'GFM' and 'LFM' in downstream clustering analysis based on the benchchmarked clusters 'y'.
-```{r  eval= FALSE}
+First, we load the 'GFM' package and the real data which can be downloaded [here](https://github.com/feiyoung/GFM/tree/main/vignettes_data). This data is in the format of '.Rdata' that inludes a gene expression matrix 'X' with 3460 rows (cells) and 2000 columns (genes), a vector 'group' specifying two groups of variable types ('type' variable) including 'gaussian' and 'poisson' and a vector 'y' meaning the clusters of cells annotated by experts. We compare the performance of 'GFM' and 'LFM' in downstream clustering analysis based on the benchchmarked clusters 'y'.
+```{r  eval=TRUE}
 githubURL <- "https://github.com/feiyoung/GFM/blob/main/vignettes_data/Brain76.Rdata?raw=true"
 download.file(githubURL,"Brain76.Rdata",mode='wb')
 ```
 Then load to R
 
-```{r  eval= FALSE}
+```{r  eval=TRUE}
 load("Brain76.Rdata")
 XList <- list(X[,group==1], X[,group==2])
 types <- type
+str(XList)
 ```
 
-```{r  eval=FALSE}
+```{r  eval=TRUE}
 
 library("GFM")
 #load("vignettes_data\\Brain76.Rdata")
@@ -40,7 +41,7 @@ set.seed(2023) # set a random seed for reproducibility.
 
 ### Fit GFM model
 We fit the GFM model using 'gfm' function.
-```{r  eval=FALSE}
+```{r  eval=TRUE}
 q <- 15
 system.time(
   gfm1 <- gfm(XList, types, q= q, verbose = TRUE)
@@ -51,7 +52,7 @@ system.time(
 
 ### Compare with LFM in downstream analysis
 We conduct the clustering analysis based on the extracted factors by GFM and evaluate the adjusted rand index (ARI) value based on the annotated cluster labels by experts. 
-```{r  eval=FALSE}
+```{r  eval=TRUE}
 hH <- gfm1$hH
 library(mclust)
 set.seed(1)
@@ -61,7 +62,7 @@ ARI_gfm <- adjustedRandIndex(gmm1$classification, y)
 ```
 
 We fit linear factor model using same number of factors.
-```{r  eval=FALSE}
+```{r  eval=TRUE}
 fac <- Factorm(X, q=15)
 hH_lfm <- fac$hH
 set.seed(1)
@@ -71,7 +72,7 @@ ARI_lfm <- adjustedRandIndex(gmm2$classification, y)
 ```
 
 Compare with the ARIs by visualization.
-```{r  eval=FALSE}
+```{r  eval=TRUE}
 library(ggplot2)
 df1 <- data.frame(ARI= c(ARI_gfm,ARI_lfm),
                     Method =factor(c('GFM', "LFM")))

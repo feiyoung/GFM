@@ -245,7 +245,7 @@
 <span class="co">#&gt; Starting the varitional EM algorithm...</span>
 <span class="co">#&gt; Finish the varitional EM algorithm...</span>
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;    0.34    0.03    0.50</span></code></pre></div>
+<span class="co">#&gt;    0.25    0.00    0.43</span></code></pre></div>
 <p>Additionally, we demonstrate the two methods, eigenvalue ratio test (ratio_test) and information criterion (IC), to choose the number of factors, which suggests both methods can accurately chooose the number of factors, while <code>ratio_test</code> is much more efficient than the <code>IC</code> method that is even though implemented in parallel. Thus, we strongly recommand <code>ratio_test</code>, especially for high-dimensional large-scale data.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">system.time</span>(</a>
 <a class="sourceLine" id="cb11-2" title="2">  hq &lt;-<span class="st"> </span><span class="kw">chooseFacNumber</span>(XList, types, <span class="dt">select_method =</span> <span class="st">"ratio_test"</span>, <span class="dt">q_set =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">verbose=</span><span class="ot">FALSE</span>)</a>
@@ -254,7 +254,7 @@
 <a class="sourceLine" id="cb11-5" title="5"><span class="co">#&gt; Finish the varitional EM algorithm...</span></a>
 <a class="sourceLine" id="cb11-6" title="6"><span class="co">#&gt; Eigevalue ratio test estimates the factor number q  as 3.</span></a>
 <a class="sourceLine" id="cb11-7" title="7"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb11-8" title="8"><span class="co">#&gt;    0.25    0.03    0.50</span></a>
+<a class="sourceLine" id="cb11-8" title="8"><span class="co">#&gt;    0.27    0.00    0.46</span></a>
 <a class="sourceLine" id="cb11-9" title="9"> </a>
 <a class="sourceLine" id="cb11-10" title="10"><span class="kw">system.time</span>(</a>
 <a class="sourceLine" id="cb11-11" title="11">  hq &lt;-<span class="st"> </span><span class="kw">chooseFacNumber</span>(XList, types, <span class="dt">q_set=</span><span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">select_method =</span> <span class="st">"IC"</span>, <span class="dt">parallelList=</span><span class="kw">list</span>(<span class="dt">parallel=</span><span class="ot">TRUE</span>))</a>
@@ -274,7 +274,7 @@
 <a class="sourceLine" id="cb11-25" title="25"><span class="st">  </span><span class="er">|======================================================================|</span><span class="st"> </span><span class="dv">100</span>%</a>
 <a class="sourceLine" id="cb11-26" title="26"><span class="co">#&gt; IC criterion estimates the factor number q  as 3.</span></a>
 <a class="sourceLine" id="cb11-27" title="27"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb11-28" title="28"><span class="co">#&gt;    0.05    0.02   14.19</span></a></code></pre></div>
+<a class="sourceLine" id="cb11-28" title="28"><span class="co">#&gt;    0.00    0.00   13.91</span></a></code></pre></div>
 <p>Third, we compare the results with that of linear factor models.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
@@ -294,7 +294,7 @@
 <p><img src="GFM.Simu_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 </div>
 <div class="section level3">
-<h3 id="gfm-outperforms-lfm-in-analyzing-data-withh-the-mixed-types-of-count-and-categorical-variables">GFM outperforms LFM in analyzing data withh the mixed-types of count and categorical variables<a class="anchor" aria-label="anchor" href="#gfm-outperforms-lfm-in-analyzing-data-withh-the-mixed-types-of-count-and-categorical-variables"></a>
+<h3 id="gfm-outperforms-lfm-in-analyzing-data-with-the-mixed-types-of-count-and-categorical-variables">GFM outperforms LFM in analyzing data with the mixed-types of count and categorical variables<a class="anchor" aria-label="anchor" href="#gfm-outperforms-lfm-in-analyzing-data-with-the-mixed-types-of-count-and-categorical-variables"></a>
 </h3>
 <p>First, we generate the data with Count(Poisson) variables and set the parameters of algorithm. Then fit the GFM model with user-specified number of factors.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
