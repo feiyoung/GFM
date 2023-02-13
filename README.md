@@ -1,4 +1,5 @@
 # GFM
+
 =========================================================================
 <!-- badges: start -->
 
@@ -7,7 +8,19 @@
 [![](https://cranlogs.r-pkg.org/badges/grand-total/GFM?color=orange)](https://cran.r-project.org/package=GFM)
 <!-- badges: end -->
 
-Generalized factor model for ultra-high dimensional variables with mixed types --R version
+GFM: Generalized factor model for ultra-high dimensional variables with mixed types.
+
+GFM  is a package for analyzing  the (ultra)high dimensional data with mixed-type variables, developed by the Huazhen Lin's lab. It is not only computationally efficient and scalable to the sample size increment, but also is capable of choosing the number of factors. Two algorithms, variational EM and alternate maximization, are designed to implement the generalized factor model, respectively, which ensures that the factor matrix and loading matrix together with the number of factors can be well estimated. 
+
+
+Check out our [JASA paper](https://www.tandfonline.com/doi/abs/10.1080/01621459.2021.1999818?journalCode=uasa20) and our [Package vignette](https://feiyoung.github.io/GFM/docs/index.html)  for a more complete description of the methods and analyses. 
+
+GFM can be used to analyze experimental dataset from different areas, for instance:
+
+* Social and behavioral sciences
+* Economy and finance
+* Genomics...
+
 
 Please see our new paper for model details:
 
@@ -24,8 +37,6 @@ Or install the the packages "GFM" from 'CRAN'
 ```{Rmd}
 install.packages("GFM")
 ```
-
-Besides, this package also has the MATLAB version at [https://github.com/feiyoung/MGFM](https://github.com/feiyoung/MGFM), which runs faster in MATLAB environment.
 
 # Demonstration
 

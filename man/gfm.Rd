@@ -2,31 +2,24 @@
 \alias{gfm}
 \title{Generalized Factor Model}
 \description{
-  This function is used to conduct the Generalized Factor Model.
+  This function is to implement the generalized factor model.
 }
 \usage{
-  gfm(X, group, type, q = NULL, parallel = TRUE, para.type =
-                 "doSNOW", ncores = 10, dropout = 0, dc_eps = 1e-04,
-                 maxIter = 50, q_set = 1:10, output = TRUE,
-                 fast_version = FALSE)
+  gfm(XList, types, q=10, offset=FALSE, dc_eps=1e-4, maxIter=30,
+                verbose = TRUE, algorithm=c("VEM", "Alternate_Maximization"))
 }
 \arguments{
-  \item{X}{a matrix with dimension of n*p(p=(p1+p2+..+p_d)),observational mixed data matrix, d is the types of variables, p_j is the dimension of j-th type variable.}
-  \item{group}{a vector with length equal to p, specify each column of X belonging to which group.}
-  \item{type}{a d-dimensional character vector, specify the type of variables in each group. For example, \code{type=c'poisson', 'binomial')}, and it is referred to the help file of \link{glm.fit} function for more details.}
-  \item{q}{a positive integer or empty, specify the number of factors. If q is \code{NULL}, then IC criteria is used to dertemined $q$ automatically.}
-  \item{parallel}{a logical value with TRUE or FALSE, indicates wheter to use prallel computating. Optional parameter with default as TRUE.}
-  \item{para.type}{a character specifying the type of parallel including 'doSNOW' and 'parallel'.}
-  \item{ncores}{a positive integer, specify the number of cores used for parallel computing.}
-  \item{dropout}{a proper subset of $[1, 2, ..., d]$,  specify which group to be dropped in obtaining the initial estimate of factor matrix $H$, and the aim is to ensure the convergence of algorithm leaded by weak signal variable types. Optional parameter with default as 0, no group dropping.}
-  \item{dc_eps}{ positive real number, specify the tolerance of varing quantity of objective function in the algorithm. Optional parameter with default as \code{1e-4}.}
-  \item{maxIter}{a positive integer, specify the times of iteration. Optional parameter with default as 50.}
-  \item{q_set}{a positive integer vector, specify the candidates of factor number q, (optional) default as \code{c(1:10)} according to Bai,2013.}
-  \item{output}{a logical value with TRUE or FALSE, specify whether ouput the mediate information in iteration process, (optional) default as FALSE.}
-  \item{fast_version}{logical value with TRUE or FALSE, \code{fast_version = TRUE}: use the fast algorithm which omit the one-step updating, but it cannot ensure the estimation efficieny; \code{fast_version = FALSE}: use the original algorithm; (optional) default as \code{FALSE}; }
+  \item{XList}{a list consisting of matrices with the same rows n, and different columns (p1,p2, ..., p_d),observational mixed data matrix list, d is the types of variables, p_j is the dimension of varibles with the j-th   type.}
+  \item{types}{a d-dimensional character vector, specify the type of variables. For example, \code{types=c('gaussian','poisson', 'binomial')}, implies the  components of \code{XList} are matrices with continuous, count and binomial values, respectively.}
+  \item{q}{a positive integer or empty, specify the number of factors, defualt as 10.}
+  \item{offset}{a logical value, whether add an offset term (the total counts for each row in the count component of XList) when there are Poisson variables.}
+  \item{dc_eps}{a positive real, specify the relative tolerance of objective function in the algorithm. Optional parameter with default as \code{1e-4}.}
+  \item{maxIter}{a positive integer, specify the times of iteration. Optional parameter with default as 30.}
+  \item{verbose}{a logical value with TRUE or FALSE, specify whether ouput the information in iteration process, (optional) default as TRUE.}
+  \item{algorithm}{a string, specify the algorithm to be used for fitting model. Now it supports two algorithms: variational EM (VEM) and alternate maximization (Alternate_Maximization) algorithm, default as VEM. Empirically, we observed that VEM is more robust than Alternate_Maximization to the high noise data.}
 }
 \details{
-  This function also has the MATLAB version at \url{https://github.com/feiyoung/MGFM/blob/master/gfm.m}, which runs faster in MATLAB environment.
+  This function also has the MATLAB version at \url{https://github.com/feiyoung/MGFM/blob/master/gfm.m}.
 }
 \value{
   return a list with class name 'gfm' and including following components,
@@ -38,7 +31,8 @@
   \item{history}{a list including the following 7 components: (1)dB: the varied quantity of B in each iteration; (2)dH: the varied quantity of H in each iteration; (3)dc: the varied quantity of the objective function in each iteration; (4)c: the objective value in each iteration; (5) realIter: the real iterations to converge; (6)maxIter: the tolerance of maximum iterations; (7)elapsedTime: the elapsed time.}
 }
 \references{
-  Liu, W., Lin, H., Zheng, S., & Liu, J. (2021). Generalized factor model for ultra-high dimensional correlated variables with mixed types. Journal of the American Statistical Association, (just-accepted), 1-42.
+\href{https://www.tandfonline.com/doi/abs/10.1080/01621459.2021.1999818?journalCode=uasa20}{Liu, W., Lin, H., Zheng, S., & Liu, J. (2021). Generalized factor model for ultra-high dimensional correlated variables with mixed types. Journal of the American Statistical Association, (just-accepted), 1-42.}
+
 
   Bai, J. and Liao, Y. (2013). Statistical inferences using large esti-
 mated covariances for panel data and factor models.
@@ -57,12 +51,9 @@ mated covariances for panel data and factor models.
 ## mix of normal and Poisson
 
 dat <- gendata(seed=1, n=60, p=60, type='norm_pois', q=2, rho=2)
-group <- c(rep(1,ncol(dat$X)/2), rep(2,ncol(dat$X)/2))
-type <- c('gaussian','poisson')
 ## we set maxIter=2 for example.
-gfm2 <- gfm(dat$X, group, type, dropout = 2, q=2, output = FALSE, maxIter=2, parallel =FALSE)
+gfm2 <- gfm(dat$XList,  dat$types,  q=2, verbose = FALSE, maxIter=2)
 measurefun(gfm2$hH, dat$H0, type='ccor')
 measurefun(gfm2$hB, dat$B0, type='ccor')
 }
 
-\keyword{GFM}

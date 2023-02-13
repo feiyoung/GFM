@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">GFM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -65,7 +61,14 @@
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/feiyoung/GFM/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -79,34 +82,35 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>GFM: installation and simulated example</h1>
-                        <h4 class="author">Wei Liu</h4>
+                        <h4 data-toc-skip class="author">Wei Liu</h4>
             
-            <h4 class="date">2021-12-25</h4>
+            <h4 data-toc-skip class="date">2023-02-13</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/feiyoung/GFM/blob/HEAD/vignettes/GFM.Simu.Rmd" class="external-link"><code>vignettes/GFM.Simu.Rmd</code></a></small>
       <div class="hidden name"><code>GFM.Simu.Rmd</code></div>
 
     </div>
 
     
     
-<div id="install-the-gfm" class="section level2">
-<h2 class="hasAnchor">
-<a href="#install-the-gfm" class="anchor"></a>Install the GFM</h2>
-<p>This vignette provides an introduction to the R package <code>GFM</code>, where the function <code>gfm</code> implements the model <code>GFM</code>, Generalized Factor Model for ultra-high dimensional variables with mixed types. The package can be installed with the command:</p>
-<p><code><a href="https://remotes.r-lib.org">library(remotes)</a></code></p>
-<p><code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github("feiyoung/RGFM")</a></code></p>
+<div class="section level2">
+<h2 id="install-the-gfm">Install the GFM<a class="anchor" aria-label="anchor" href="#install-the-gfm"></a>
+</h2>
+<p>This vignette provides an introduction to the R package <code>GFM</code>, where the function <code>gfm</code> implements the model <code>GFM</code>, Generalized Factor Model for ultra-high dimensional variables with mixed types. The estimated factors and loading matrices can be applied to a variaty of downstream analyses, such as cell type clustering in single cell RNA sequencing data analysis and important SNPs identification in GWAS data analysis, among others.</p>
+<p>The package can be installed with the command:</p>
+<p><code><a href="https://remotes.r-lib.org" class="external-link">library(remotes)</a></code></p>
+<p><code>remotes::install_github("feiyoung/GFM")</code></p>
 <p>or</p>
-<p><code><a href="https://rdrr.io/r/utils/installed.packages.html">install.packages("GFM")</a></code></p>
+<p><code>install.packages("GFM")</code></p>
 <p>The package can be loaded with the command:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st">"GFM"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/feiyoung/GFM" class="external-link">"GFM"</a></span><span class="op">)</span>
+<span class="co">#&gt; Loading required package: irlba</span>
+<span class="co">#&gt; Loading required package: Matrix</span>
 <span class="co">#&gt; Loading required package: doSNOW</span>
-<span class="co">#&gt; Warning: package 'doSNOW' was built under R version 4.0.5</span>
 <span class="co">#&gt; Loading required package: foreach</span>
 <span class="co">#&gt; Loading required package: iterators</span>
 <span class="co">#&gt; Loading required package: snow</span>
-<span class="co">#&gt; Warning: package 'snow' was built under R version 4.0.5</span>
 <span class="co">#&gt; Loading required package: parallel</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Attaching package: 'parallel'</span>
@@ -115,224 +119,264 @@
 <span class="co">#&gt;     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,</span>
 <span class="co">#&gt;     clusterExport, clusterMap, clusterSplit, makeCluster, parApply,</span>
 <span class="co">#&gt;     parCapply, parLapply, parRapply, parSapply, splitIndices,</span>
-<span class="co">#&gt;     stopCluster</span></code></pre></div>
+<span class="co">#&gt;     stopCluster</span>
+<span class="co">#&gt; GFM :  Generalized factor model is implemented for ultra-high dimensional data with mixed-type variables.</span>
+<span class="co">#&gt; Two algorithms, variational EM and alternate maximization, are designed to implement the generalized factor model,</span>
+<span class="co">#&gt; respectively. The factor matrix and loading matrix together with the number of factors can be well estimated.</span>
+<span class="co">#&gt; This model can be employed in social and behavioral sciences, economy and finance, and  genomics,</span>
+<span class="co">#&gt; to extract interpretable nonlinear factors. More details can be referred to</span>
+<span class="co">#&gt; Wei Liu, Huazhen Lin, Shurong Zheng and Jin Liu. (2021) &lt;doi:10.1080/01621459.2021.1999818&gt;.   Check out our Package website (https://feiyoung.github.io/GFM/docs/index.html) for a more complete description of the methods and analyses</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="co"># set a random seed for reproducibility.</span></code></pre></div>
 </div>
-<div id="fit-gfm-model-using-simulated-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#fit-gfm-model-using-simulated-data" class="anchor"></a>Fit GFM model using simulated data</h2>
-<div id="generate-data-with-homogeneous-normal-variables" class="section level3">
-<h3 class="hasAnchor">
-<a href="#generate-data-with-homogeneous-normal-variables" class="anchor"></a>Generate data with homogeneous normal variables</h3>
+<div class="section level2">
+<h2 id="fit-gfm-model-using-simulated-data">Fit GFM model using simulated data<a class="anchor" aria-label="anchor" href="#fit-gfm-model-using-simulated-data"></a>
+</h2>
+<div class="section level3">
+<h3 id="gfm-can-handle-data-with-homogeneous-normal-variables">GFM can handle data with homogeneous normal variables<a class="anchor" aria-label="anchor" href="#gfm-can-handle-data-with-homogeneous-normal-variables"></a>
+</h3>
 <p>First, we generate the data with homogeneous normal variables.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Homogeneous  normal variables</span>
   <span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gendata.html">gendata</a></span><span class="op">(</span>q <span class="op">=</span> <span class="fl">2</span>, n<span class="op">=</span><span class="fl">100</span>, p<span class="op">=</span><span class="fl">100</span>, rho<span class="op">=</span><span class="fl">3</span><span class="op">)</span></code></pre></div>
 <p>Then, we set the algorithm parameters and fit model</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># full-one vector means there is only one variable type within all variables.</span>
-  <span class="va">group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">X</span><span class="op">)</span><span class="op">)</span> 
+<code class="sourceCode R"><span class="co"># Obtain the observed data</span>
+  <span class="va">XList</span> <span class="op">&lt;-</span> <span class="va">dat</span><span class="op">$</span><span class="va">XList</span> <span class="co"># this is the data in the form of matrix list.</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">XList</span><span class="op">)</span>
+<span class="co">#&gt; List of 1</span>
+<span class="co">#&gt;  $ : num [1:100, 1:100] -1.031 1.528 -0.565 1.288 -0.667 ...</span>
+<span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
+<span class="co">#&gt;   .. ..$ : NULL</span>
+<span class="co">#&gt;   .. ..$ : NULL</span>
+  <span class="va">X</span> <span class="op">&lt;-</span> <span class="va">dat</span><span class="op">$</span><span class="va">X</span> <span class="co"># this is the data in form of matrix</span>
 <span class="co"># set variables' type, 'gaussian' means there is  continous variable type.</span>
-  <span class="va">type</span> <span class="op">&lt;-</span> <span class="st">'gaussian'</span> </code></pre></div>
+  <span class="va">types</span> <span class="op">&lt;-</span> <span class="st">'gaussian'</span> </code></pre></div>
 <p>Third, we fit the GFM model with user-specified number of factors.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># specify q=2</span>
-  <span class="va">gfm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gfm.html">gfm</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">X</span>, <span class="va">group</span>, <span class="va">type</span>, q<span class="op">=</span><span class="fl">2</span>, output <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="co">#&gt; Starting the alternate minimization algorithm...</span>
-<span class="co">#&gt; Finish the iterative algorithm...</span>
+  <span class="va">gfm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gfm.html">gfm</a></span><span class="op">(</span><span class="va">XList</span>, <span class="va">types</span>,  q<span class="op">=</span><span class="fl">2</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="co">#&gt; Starting the varitional EM algorithm...</span>
+<span class="co">#&gt; Finish the varitional EM algorithm...</span>
   
   <span class="co"># measure the performance of GFM estimators in terms of canonical correlations</span>
   <span class="fu"><a href="../reference/measurefun.html">measurefun</a></span><span class="op">(</span><span class="va">gfm1</span><span class="op">$</span><span class="va">hH</span>, <span class="va">dat</span><span class="op">$</span><span class="va">H0</span>, type<span class="op">=</span><span class="st">'ccor'</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.9893027</span>
+<span class="co">#&gt; [1] 0.9923848</span>
   <span class="fu"><a href="../reference/measurefun.html">measurefun</a></span><span class="op">(</span><span class="va">gfm1</span><span class="op">$</span><span class="va">hB</span>, <span class="va">dat</span><span class="op">$</span><span class="va">B0</span>, type<span class="op">=</span><span class="st">'ccor'</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.9931255</span></code></pre></div>
+<span class="co">#&gt; [1] 0.9933249</span></code></pre></div>
 <p>The number of factors can also be determined by data-driven manners.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># select q automatically</span></a>
-<a class="sourceLine" id="cb5-2" title="2">  gfm2 &lt;-<span class="st"> </span><span class="kw">gfm</span>(dat<span class="op">$</span>X, group, type, <span class="dt">q=</span><span class="ot">NULL</span>, <span class="dt">q_set =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">output =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb5-4" title="4">  <span class="op">|</span><span class="st">                                                                            </span></a>
-<a class="sourceLine" id="cb5-5" title="5"><span class="st">  </span><span class="er">|</span><span class="st">                                                                      </span><span class="er">|</span><span class="st">   </span><span class="dv">0</span>%</a>
-<a class="sourceLine" id="cb5-6" title="6">  <span class="op">|</span><span class="st">                                                                            </span></a>
-<a class="sourceLine" id="cb5-7" title="7"><span class="st">  </span><span class="er">|==============</span><span class="st">                                                        </span><span class="er">|</span><span class="st">  </span><span class="dv">20</span>%</a>
-<a class="sourceLine" id="cb5-8" title="8">  <span class="op">|</span><span class="st">                                                                            </span></a>
-<a class="sourceLine" id="cb5-9" title="9"><span class="st">  </span><span class="er">|============================</span><span class="st">                                          </span><span class="er">|</span><span class="st">  </span><span class="dv">40</span>%</a>
-<a class="sourceLine" id="cb5-10" title="10">  <span class="op">|</span><span class="st">                                                                            </span></a>
-<a class="sourceLine" id="cb5-11" title="11"><span class="st">  </span><span class="er">|==========================================</span><span class="st">                            </span><span class="er">|</span><span class="st">  </span><span class="dv">60</span>%</a>
-<a class="sourceLine" id="cb5-12" title="12">  <span class="op">|</span><span class="st">                                                                            </span></a>
-<a class="sourceLine" id="cb5-13" title="13"><span class="st">  </span><span class="er">|========================================================</span><span class="st">              </span><span class="er">|</span><span class="st">  </span><span class="dv">80</span>%</a>
-<a class="sourceLine" id="cb5-14" title="14">  <span class="op">|</span><span class="st">                                                                            </span></a>
-<a class="sourceLine" id="cb5-15" title="15"><span class="st">  </span><span class="er">|======================================================================|</span><span class="st"> </span><span class="dv">100</span>%</a>
-<a class="sourceLine" id="cb5-16" title="16"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb5-17" title="17"><span class="co">#&gt; The factor number q is estimated as 2.</span></a>
-<a class="sourceLine" id="cb5-18" title="18"><span class="co">#&gt; Starting the alternate minimization algorithm...</span></a>
-<a class="sourceLine" id="cb5-19" title="19"><span class="co">#&gt; Finish the iterative algorithm...</span></a>
-<a class="sourceLine" id="cb5-20" title="20"><span class="co"># measure the performance of GFM estimators in terms of canonical correlations</span></a>
-<a class="sourceLine" id="cb5-21" title="21">  <span class="kw">measurefun</span>(gfm2<span class="op">$</span>hH, dat<span class="op">$</span>H0, <span class="dt">type=</span><span class="st">'ccor'</span>)</a>
-<a class="sourceLine" id="cb5-22" title="22"><span class="co">#&gt; [1] 0.9893027</span></a>
-<a class="sourceLine" id="cb5-23" title="23">  <span class="kw">measurefun</span>(gfm2<span class="op">$</span>hB, dat<span class="op">$</span>B0, <span class="dt">type=</span><span class="st">'ccor'</span>)</a>
-<a class="sourceLine" id="cb5-24" title="24"><span class="co">#&gt; [1] 0.9931255</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># select q automatically</span>
+  <span class="va">hq</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chooseFacNumber.html">chooseFacNumber</a></span><span class="op">(</span><span class="va">XList</span>, <span class="va">types</span>, q_set <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="co">#&gt; Starting the varitional EM algorithm...</span>
+<span class="co">#&gt; Finish the varitional EM algorithm...</span>
+<span class="co">#&gt; Eigevalue ratio test estimates the factor number q  as 2.</span>
+  <span class="va">hq</span>
+<span class="co">#&gt; [1] 2</span></code></pre></div>
 </div>
-<div id="generate-data-with-heterogeous-normal-variables" class="section level3">
-<h3 class="hasAnchor">
-<a href="#generate-data-with-heterogeous-normal-variables" class="anchor"></a>Generate data with heterogeous normal variables</h3>
+<div class="section level3">
+<h3 id="gfm-outperforms-lfm-in-analyzing-data-with-heterogeous-normal-variables">GFM outperforms LFM in analyzing data with heterogeous normal variables<a class="anchor" aria-label="anchor" href="#gfm-outperforms-lfm-in-analyzing-data-with-heterogeous-normal-variables"></a>
+</h3>
 <p>First, we generate the data with heterogeous normal variables and set the parameters of algorithm.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R">  <span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gendata.html">gendata</a></span><span class="op">(</span>seed<span class="op">=</span><span class="fl">1</span>, n<span class="op">=</span><span class="fl">100</span>, p<span class="op">=</span><span class="fl">100</span>, type<span class="op">=</span><span class="st">'heternorm'</span>, q<span class="op">=</span><span class="fl">2</span>, rho<span class="op">=</span><span class="fl">1</span><span class="op">)</span>
-  <span class="va">group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">X</span><span class="op">)</span><span class="op">)</span>
-  <span class="va">type</span> <span class="op">&lt;-</span> <span class="st">'gaussian'</span></code></pre></div>
+ <span class="co"># Obtain the observed data</span>
+  <span class="va">XList</span> <span class="op">&lt;-</span> <span class="va">dat</span><span class="op">$</span><span class="va">XList</span> <span class="co"># this is the data in the form of matrix list.</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">XList</span><span class="op">)</span>
+<span class="co">#&gt; List of 1</span>
+<span class="co">#&gt;  $ : num [1:100, 1:100] 0.7458 -2.006 1.705 0.0484 3.094 ...</span>
+<span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
+<span class="co">#&gt;   .. ..$ : NULL</span>
+<span class="co">#&gt;   .. ..$ : NULL</span>
+  <span class="va">X</span> <span class="op">&lt;-</span> <span class="va">dat</span><span class="op">$</span><span class="va">X</span> <span class="co"># this is the data in form of matrix</span>
+<span class="co"># set variables' type, 'gaussian' means there is  continous variable type.</span>
+  <span class="va">types</span> <span class="op">&lt;-</span> <span class="st">'gaussian'</span> </code></pre></div>
 <p>Third, we fit the GFM model with user-specified number of factors and compare the results with that of linear factor models.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># specify q=2</span>
-  <span class="va">gfm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gfm.html">gfm</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">X</span>, <span class="va">group</span>, <span class="va">type</span>, q<span class="op">=</span><span class="fl">2</span>, output <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="co">#&gt; Starting the alternate minimization algorithm...</span>
-<span class="co">#&gt; Finish the iterative algorithm...</span>
+  <span class="va">gfm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gfm.html">gfm</a></span><span class="op">(</span><span class="va">XList</span>, <span class="va">types</span>, q<span class="op">=</span><span class="fl">2</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="co">#&gt; Starting the varitional EM algorithm...</span>
+<span class="co">#&gt; Finish the varitional EM algorithm...</span>
   
   <span class="co"># measure the performance of GFM estimators in terms of canonical correlations</span>
   <span class="va">corH_gfm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/measurefun.html">measurefun</a></span><span class="op">(</span><span class="va">gfm1</span><span class="op">$</span><span class="va">hH</span>, <span class="va">dat</span><span class="op">$</span><span class="va">H0</span>, type<span class="op">=</span><span class="st">'ccor'</span><span class="op">)</span>
   <span class="va">corB_gfm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/measurefun.html">measurefun</a></span><span class="op">(</span><span class="va">gfm1</span><span class="op">$</span><span class="va">hB</span>, <span class="va">dat</span><span class="op">$</span><span class="va">B0</span>, type<span class="op">=</span><span class="st">'ccor'</span><span class="op">)</span>
   
-  <span class="va">lfm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Factorm.html">Factorm</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">X</span>, q<span class="op">=</span><span class="fl">2</span><span class="op">)</span>
+  <span class="va">lfm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Factorm.html">Factorm</a></span><span class="op">(</span><span class="va">X</span>, q<span class="op">=</span><span class="fl">2</span><span class="op">)</span>
   <span class="va">corH_lfm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/measurefun.html">measurefun</a></span><span class="op">(</span><span class="va">lfm1</span><span class="op">$</span><span class="va">hH</span>, <span class="va">dat</span><span class="op">$</span><span class="va">H0</span>, type<span class="op">=</span><span class="st">'ccor'</span><span class="op">)</span>
   <span class="va">corB_lfm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/measurefun.html">measurefun</a></span><span class="op">(</span><span class="va">lfm1</span><span class="op">$</span><span class="va">hB</span>, <span class="va">dat</span><span class="op">$</span><span class="va">B0</span>, type<span class="op">=</span><span class="st">'ccor'</span><span class="op">)</span>
   
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
-  <span class="va">df1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>CCor<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">corH_gfm</span>, <span class="va">corH_lfm</span>, <span class="va">corB_gfm</span>, <span class="va">corB_lfm</span><span class="op">)</span>,
-                    Method <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'GFM'</span>, <span class="st">"LFM"</span><span class="op">)</span>, times<span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>,
-                    Quantity<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">'factors'</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">df1</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Quantity</span>, y<span class="op">=</span><span class="va">CCor</span>, fill<span class="op">=</span><span class="va">Method</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span>, stat<span class="op">=</span><span class="st">"identity"</span>,width <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
+  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<span class="co">#&gt; Warning: package 'ggplot2' was built under R version 4.1.3</span>
+  <span class="va">df1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>CCor<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">corH_gfm</span>, <span class="va">corH_lfm</span>, <span class="va">corB_gfm</span>, <span class="va">corB_lfm</span><span class="op">)</span>,
+                    Method <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'GFM'</span>, <span class="st">"LFM"</span><span class="op">)</span>, times<span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>,
+                    Quantity<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'factors'</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">df1</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Quantity</span>, y<span class="op">=</span><span class="va">CCor</span>, fill<span class="op">=</span><span class="va">Method</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span>, stat<span class="op">=</span><span class="st">"identity"</span>,width <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
 <p><img src="GFM.Simu_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <p>The number of factors can also be determined by data-driven manners.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="co"># select q automatically</span></a>
-<a class="sourceLine" id="cb8-2" title="2">  gfm2 &lt;-<span class="st"> </span><span class="kw">gfm</span>(dat<span class="op">$</span>X, group, type, <span class="dt">q=</span><span class="ot">NULL</span>, <span class="dt">q_set =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">output =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb8-3" title="3"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-4" title="4">  <span class="op">|</span><span class="st">                                                                            </span></a>
-<a class="sourceLine" id="cb8-5" title="5"><span class="st">  </span><span class="er">|</span><span class="st">                                                                      </span><span class="er">|</span><span class="st">   </span><span class="dv">0</span>%</a>
-<a class="sourceLine" id="cb8-6" title="6">  <span class="op">|</span><span class="st">                                                                            </span></a>
-<a class="sourceLine" id="cb8-7" title="7"><span class="st">  </span><span class="er">|=======================</span><span class="st">                                               </span><span class="er">|</span><span class="st">  </span><span class="dv">33</span>%</a>
-<a class="sourceLine" id="cb8-8" title="8">  <span class="op">|</span><span class="st">                                                                            </span></a>
-<a class="sourceLine" id="cb8-9" title="9"><span class="st">  </span><span class="er">|===============================================</span><span class="st">                       </span><span class="er">|</span><span class="st">  </span><span class="dv">67</span>%</a>
-<a class="sourceLine" id="cb8-10" title="10">  <span class="op">|</span><span class="st">                                                                            </span></a>
-<a class="sourceLine" id="cb8-11" title="11"><span class="st">  </span><span class="er">|======================================================================|</span><span class="st"> </span><span class="dv">100</span>%</a>
-<a class="sourceLine" id="cb8-12" title="12"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-13" title="13"><span class="co">#&gt; The factor number q is estimated as 2.</span></a>
-<a class="sourceLine" id="cb8-14" title="14"><span class="co">#&gt; Starting the alternate minimization algorithm...</span></a>
-<a class="sourceLine" id="cb8-15" title="15"><span class="co">#&gt; Finish the iterative algorithm...</span></a>
-<a class="sourceLine" id="cb8-16" title="16"><span class="co"># measure the performance of GFM estimators in terms of canonical correlations</span></a>
-<a class="sourceLine" id="cb8-17" title="17">  corH_gfm &lt;-<span class="st"> </span><span class="kw">measurefun</span>(gfm2<span class="op">$</span>hH, dat<span class="op">$</span>H0, <span class="dt">type=</span><span class="st">'ccor'</span>)</a>
-<a class="sourceLine" id="cb8-18" title="18">  corB_gfm &lt;-<span class="st"> </span><span class="kw">measurefun</span>(gfm2<span class="op">$</span>hB, dat<span class="op">$</span>B0, <span class="dt">type=</span><span class="st">'ccor'</span>)</a>
-<a class="sourceLine" id="cb8-19" title="19">  </a>
-<a class="sourceLine" id="cb8-20" title="20">  <span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb8-21" title="21">  df1 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">CCor=</span> <span class="kw">c</span>(corH_gfm, corH_lfm, corB_gfm, corB_lfm),</a>
-<a class="sourceLine" id="cb8-22" title="22">                    <span class="dt">Method =</span><span class="kw">factor</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">'GFM'</span>, <span class="st">"LFM"</span>), <span class="dt">times=</span><span class="dv">2</span>)),</a>
-<a class="sourceLine" id="cb8-23" title="23">                    <span class="dt">Quantity=</span> <span class="kw">factor</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">'factors'</span>,<span class="dv">2</span>), <span class="kw">rep</span>(<span class="st">"loadings"</span>, <span class="dv">2</span>))))</a>
-<a class="sourceLine" id="cb8-24" title="24">  <span class="kw">ggplot</span>(<span class="dt">data=</span>df1, <span class="kw">aes</span>(<span class="dt">x=</span>Quantity, <span class="dt">y=</span>CCor, <span class="dt">fill=</span>Method)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_bar</span>(<span class="dt">position =</span> <span class="st">"dodge"</span>, <span class="dt">stat=</span><span class="st">"identity"</span>,<span class="dt">width =</span> <span class="fl">0.5</span>)</a></code></pre></div>
-<p><img src="GFM.Simu_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># select q automatically</span>
+   <span class="va">hq</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chooseFacNumber.html">chooseFacNumber</a></span><span class="op">(</span><span class="va">XList</span>, <span class="va">types</span>, q_set <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="co">#&gt; Starting the varitional EM algorithm...</span>
+<span class="co">#&gt; Finish the varitional EM algorithm...</span>
+<span class="co">#&gt; Eigevalue ratio test estimates the factor number q  as 2.</span>
+  <span class="va">hq</span>
+<span class="co">#&gt; [1] 2</span></code></pre></div>
 </div>
-<div id="generate-data-with-countpoisson-variables" class="section level3">
-<h3 class="hasAnchor">
-<a href="#generate-data-with-countpoisson-variables" class="anchor"></a>Generate data with Count(Poisson) variables</h3>
+<div class="section level3">
+<h3 id="gfm-outperforms-lfm-in-analyzing-data-with-countpoisson-variables">GFM outperforms LFM in analyzing data with Count(Poisson) variables<a class="anchor" aria-label="anchor" href="#gfm-outperforms-lfm-in-analyzing-data-with-countpoisson-variables"></a>
+</h3>
 <p>First, we generate the data with Count(Poisson) variables and set the parameters of algorithm.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R">  <span class="va">q</span> <span class="op">&lt;-</span> <span class="fl">3</span>; <span class="va">p</span> <span class="op">&lt;-</span> <span class="fl">200</span>
   <span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gendata.html">gendata</a></span><span class="op">(</span>seed<span class="op">=</span><span class="fl">1</span>, n<span class="op">=</span><span class="fl">200</span>, p<span class="op">=</span><span class="va">p</span>, type<span class="op">=</span><span class="st">'pois'</span>, q<span class="op">=</span><span class="va">q</span>, rho<span class="op">=</span><span class="fl">4</span><span class="op">)</span>
-  <span class="va">group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">X</span><span class="op">)</span><span class="op">)</span>
-  <span class="va">type</span> <span class="op">&lt;-</span> <span class="st">'poisson'</span></code></pre></div>
-<p>Second, we we fit the GFM models in the parallel manner.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">  <span class="kw">system.time</span>(</a>
-<a class="sourceLine" id="cb10-2" title="2">    gfm2 &lt;-<span class="st"> </span><span class="kw">gfm</span>(dat<span class="op">$</span>X, group, type,<span class="dt">parallel =</span> <span class="ot">TRUE</span>, <span class="dt">q=</span><span class="ot">NULL</span>, <span class="dt">q_set =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">output =</span> <span class="ot">FALSE</span>, <span class="dt">fast_version =</span> <span class="ot">TRUE</span>))</a>
-<a class="sourceLine" id="cb10-3" title="3"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-4" title="4">  <span class="op">|</span><span class="st">                                                                            </span></a>
-<a class="sourceLine" id="cb10-5" title="5"><span class="st">  </span><span class="er">|</span><span class="st">                                                                      </span><span class="er">|</span><span class="st">   </span><span class="dv">0</span>%</a>
-<a class="sourceLine" id="cb10-6" title="6">  <span class="op">|</span><span class="st">                                                                            </span></a>
-<a class="sourceLine" id="cb10-7" title="7"><span class="st">  </span><span class="er">|=======================</span><span class="st">                                               </span><span class="er">|</span><span class="st">  </span><span class="dv">33</span>%</a>
-<a class="sourceLine" id="cb10-8" title="8">  <span class="op">|</span><span class="st">                                                                            </span></a>
-<a class="sourceLine" id="cb10-9" title="9"><span class="st">  </span><span class="er">|===============================================</span><span class="st">                       </span><span class="er">|</span><span class="st">  </span><span class="dv">67</span>%</a>
-<a class="sourceLine" id="cb10-10" title="10">  <span class="op">|</span><span class="st">                                                                            </span></a>
-<a class="sourceLine" id="cb10-11" title="11"><span class="st">  </span><span class="er">|======================================================================|</span><span class="st"> </span><span class="dv">100</span>%</a>
-<a class="sourceLine" id="cb10-12" title="12"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb10-13" title="13"><span class="co">#&gt; The factor number q is estimated as 3.</span></a>
-<a class="sourceLine" id="cb10-14" title="14"><span class="co">#&gt; Starting the alternate minimization algorithm...</span></a>
-<a class="sourceLine" id="cb10-15" title="15"><span class="co">#&gt; Finish the iterative algorithm...</span></a>
-<a class="sourceLine" id="cb10-16" title="16"><span class="co">#&gt;    user  system elapsed </span></a>
-<a class="sourceLine" id="cb10-17" title="17"><span class="co">#&gt;    2.34    1.21   56.56</span></a></code></pre></div>
+  <span class="co"># Obtain the observed data</span>
+  <span class="va">XList</span> <span class="op">&lt;-</span> <span class="va">dat</span><span class="op">$</span><span class="va">XList</span> <span class="co"># this is the data in the form of matrix list.</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">XList</span><span class="op">)</span>
+<span class="co">#&gt; List of 1</span>
+<span class="co">#&gt;  $ : int [1:200, 1:200] 0 3 4 1 0 4 2 3 1 1 ...</span>
+  <span class="va">X</span> <span class="op">&lt;-</span> <span class="va">dat</span><span class="op">$</span><span class="va">X</span> <span class="co"># this is the data in form of matrix</span>
+<span class="co"># set variables' type, 'gaussian' means there is  continous variable type.</span>
+  <span class="va">types</span> <span class="op">&lt;-</span> <span class="st">'poisson'</span></code></pre></div>
+<p>Second, we we fit the GFM models given the true number of factors.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R">  <span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span>
+   <span class="va">gfm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gfm.html">gfm</a></span><span class="op">(</span><span class="va">XList</span>, <span class="va">types</span>, q<span class="op">=</span><span class="fl">3</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+  <span class="op">)</span>
+<span class="co">#&gt; Starting the varitional EM algorithm...</span>
+<span class="co">#&gt; Finish the varitional EM algorithm...</span>
+<span class="co">#&gt;    user  system elapsed </span>
+<span class="co">#&gt;    0.34    0.03    0.50</span></code></pre></div>
+<p>Additionally, we demonstrate the two methods, eigenvalue ratio test (ratio_test) and information criterion (IC), to choose the number of factors, which suggests both methods can accurately chooose the number of factors, while <code>ratio_test</code> is much more efficient than the <code>IC</code> method that is even though implemented in parallel. Thus, we strongly recommand <code>ratio_test</code>, especially for high-dimensional large-scale data.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">system.time</span>(</a>
+<a class="sourceLine" id="cb11-2" title="2">  hq &lt;-<span class="st"> </span><span class="kw">chooseFacNumber</span>(XList, types, <span class="dt">select_method =</span> <span class="st">"ratio_test"</span>, <span class="dt">q_set =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">verbose=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb11-3" title="3">)</a>
+<a class="sourceLine" id="cb11-4" title="4"><span class="co">#&gt; Starting the varitional EM algorithm...</span></a>
+<a class="sourceLine" id="cb11-5" title="5"><span class="co">#&gt; Finish the varitional EM algorithm...</span></a>
+<a class="sourceLine" id="cb11-6" title="6"><span class="co">#&gt; Eigevalue ratio test estimates the factor number q  as 3.</span></a>
+<a class="sourceLine" id="cb11-7" title="7"><span class="co">#&gt;    user  system elapsed </span></a>
+<a class="sourceLine" id="cb11-8" title="8"><span class="co">#&gt;    0.25    0.03    0.50</span></a>
+<a class="sourceLine" id="cb11-9" title="9"> </a>
+<a class="sourceLine" id="cb11-10" title="10"><span class="kw">system.time</span>(</a>
+<a class="sourceLine" id="cb11-11" title="11">  hq &lt;-<span class="st"> </span><span class="kw">chooseFacNumber</span>(XList, types, <span class="dt">q_set=</span><span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">select_method =</span> <span class="st">"IC"</span>, <span class="dt">parallelList=</span><span class="kw">list</span>(<span class="dt">parallel=</span><span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb11-12" title="12">)</a>
+<a class="sourceLine" id="cb11-13" title="13"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-14" title="14">  <span class="op">|</span><span class="st">                                                                            </span></a>
+<a class="sourceLine" id="cb11-15" title="15"><span class="st">  </span><span class="er">|</span><span class="st">                                                                      </span><span class="er">|</span><span class="st">   </span><span class="dv">0</span>%</a>
+<a class="sourceLine" id="cb11-16" title="16">  <span class="op">|</span><span class="st">                                                                            </span></a>
+<a class="sourceLine" id="cb11-17" title="17"><span class="st">  </span><span class="er">|==============</span><span class="st">                                                        </span><span class="er">|</span><span class="st">  </span><span class="dv">20</span>%</a>
+<a class="sourceLine" id="cb11-18" title="18">  <span class="op">|</span><span class="st">                                                                            </span></a>
+<a class="sourceLine" id="cb11-19" title="19"><span class="st">  </span><span class="er">|============================</span><span class="st">                                          </span><span class="er">|</span><span class="st">  </span><span class="dv">40</span>%</a>
+<a class="sourceLine" id="cb11-20" title="20">  <span class="op">|</span><span class="st">                                                                            </span></a>
+<a class="sourceLine" id="cb11-21" title="21"><span class="st">  </span><span class="er">|==========================================</span><span class="st">                            </span><span class="er">|</span><span class="st">  </span><span class="dv">60</span>%</a>
+<a class="sourceLine" id="cb11-22" title="22">  <span class="op">|</span><span class="st">                                                                            </span></a>
+<a class="sourceLine" id="cb11-23" title="23"><span class="st">  </span><span class="er">|========================================================</span><span class="st">              </span><span class="er">|</span><span class="st">  </span><span class="dv">80</span>%</a>
+<a class="sourceLine" id="cb11-24" title="24">  <span class="op">|</span><span class="st">                                                                            </span></a>
+<a class="sourceLine" id="cb11-25" title="25"><span class="st">  </span><span class="er">|======================================================================|</span><span class="st"> </span><span class="dv">100</span>%</a>
+<a class="sourceLine" id="cb11-26" title="26"><span class="co">#&gt; IC criterion estimates the factor number q  as 3.</span></a>
+<a class="sourceLine" id="cb11-27" title="27"><span class="co">#&gt;    user  system elapsed </span></a>
+<a class="sourceLine" id="cb11-28" title="28"><span class="co">#&gt;    0.05    0.02   14.19</span></a></code></pre></div>
 <p>Third, we compare the results with that of linear factor models.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
   <span class="co"># measure the performance of GFM estimators in terms of canonical correlations</span>
-  <span class="va">corH_gfm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/measurefun.html">measurefun</a></span><span class="op">(</span><span class="va">gfm2</span><span class="op">$</span><span class="va">hH</span>, <span class="va">dat</span><span class="op">$</span><span class="va">H0</span>, type<span class="op">=</span><span class="st">'ccor'</span><span class="op">)</span>
-  <span class="va">corB_gfm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/measurefun.html">measurefun</a></span><span class="op">(</span><span class="va">gfm2</span><span class="op">$</span><span class="va">hB</span>, <span class="va">dat</span><span class="op">$</span><span class="va">B0</span>, type<span class="op">=</span><span class="st">'ccor'</span><span class="op">)</span>
+  <span class="va">corH_gfm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/measurefun.html">measurefun</a></span><span class="op">(</span><span class="va">gfm1</span><span class="op">$</span><span class="va">hH</span>, <span class="va">dat</span><span class="op">$</span><span class="va">H0</span>, type<span class="op">=</span><span class="st">'ccor'</span><span class="op">)</span>
+  <span class="va">corB_gfm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/measurefun.html">measurefun</a></span><span class="op">(</span><span class="va">gfm1</span><span class="op">$</span><span class="va">hB</span>, <span class="va">dat</span><span class="op">$</span><span class="va">B0</span>, type<span class="op">=</span><span class="st">'ccor'</span><span class="op">)</span>
   
-  <span class="va">lfm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Factorm.html">Factorm</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">X</span>, q<span class="op">=</span><span class="fl">3</span><span class="op">)</span>
+  <span class="va">lfm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Factorm.html">Factorm</a></span><span class="op">(</span><span class="va">X</span>, q<span class="op">=</span><span class="fl">3</span><span class="op">)</span>
   <span class="va">corH_lfm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/measurefun.html">measurefun</a></span><span class="op">(</span><span class="va">lfm1</span><span class="op">$</span><span class="va">hH</span>, <span class="va">dat</span><span class="op">$</span><span class="va">H0</span>, type<span class="op">=</span><span class="st">'ccor'</span><span class="op">)</span>
   <span class="va">corB_lfm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/measurefun.html">measurefun</a></span><span class="op">(</span><span class="va">lfm1</span><span class="op">$</span><span class="va">hB</span>, <span class="va">dat</span><span class="op">$</span><span class="va">B0</span>, type<span class="op">=</span><span class="st">'ccor'</span><span class="op">)</span>
   
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
-  <span class="va">df1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>CCor<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">corH_gfm</span>, <span class="va">corH_lfm</span>, <span class="va">corB_gfm</span>, <span class="va">corB_lfm</span><span class="op">)</span>,
-                    Method <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'GFM'</span>, <span class="st">"LFM"</span><span class="op">)</span>, times<span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>,
-                    Quantity<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">'factors'</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">df1</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Quantity</span>, y<span class="op">=</span><span class="va">CCor</span>, fill<span class="op">=</span><span class="va">Method</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span>, stat<span class="op">=</span><span class="st">"identity"</span>,width <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
-<p><img src="GFM.Simu_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
+  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+  <span class="va">df1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>CCor<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">corH_gfm</span>, <span class="va">corH_lfm</span>, <span class="va">corB_gfm</span>, <span class="va">corB_lfm</span><span class="op">)</span>,
+                    Method <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'GFM'</span>, <span class="st">"LFM"</span><span class="op">)</span>, times<span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>,
+                    Quantity<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'factors'</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">df1</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Quantity</span>, y<span class="op">=</span><span class="va">CCor</span>, fill<span class="op">=</span><span class="va">Method</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span>, stat<span class="op">=</span><span class="st">"identity"</span>,width <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
+<p><img src="GFM.Simu_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 </div>
-<div id="generate-data-with-the-mixed-types-of-poisson-and-binomial-variables" class="section level3">
-<h3 class="hasAnchor">
-<a href="#generate-data-with-the-mixed-types-of-poisson-and-binomial-variables" class="anchor"></a>Generate data with the mixed-types of Poisson and Binomial variables</h3>
+<div class="section level3">
+<h3 id="gfm-outperforms-lfm-in-analyzing-data-withh-the-mixed-types-of-count-and-categorical-variables">GFM outperforms LFM in analyzing data withh the mixed-types of count and categorical variables<a class="anchor" aria-label="anchor" href="#gfm-outperforms-lfm-in-analyzing-data-withh-the-mixed-types-of-count-and-categorical-variables"></a>
+</h3>
 <p>First, we generate the data with Count(Poisson) variables and set the parameters of algorithm. Then fit the GFM model with user-specified number of factors.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R">  <span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gendata.html">gendata</a></span><span class="op">(</span>seed<span class="op">=</span><span class="fl">1</span>, n<span class="op">=</span><span class="fl">200</span>, p<span class="op">=</span><span class="fl">200</span>, type<span class="op">=</span><span class="st">'pois_bino'</span>, q<span class="op">=</span><span class="fl">2</span>, rho<span class="op">=</span><span class="fl">2</span><span class="op">)</span>
-  <span class="va">group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">X</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">X</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-  <span class="va">type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'poisson'</span>,<span class="st">'binomial'</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">X</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>
+  <span class="co"># Obtain the observed data</span>
+  <span class="va">XList</span> <span class="op">&lt;-</span> <span class="va">dat</span><span class="op">$</span><span class="va">XList</span> <span class="co"># this is the data in the form of matrix list.</span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">XList</span><span class="op">)</span>
+<span class="co">#&gt; List of 2</span>
+<span class="co">#&gt;  $ : int [1:200, 1:100] 2 0 3 5 1 1 1 5 1 0 ...</span>
+<span class="co">#&gt;  $ : int [1:200, 1:100] 1 0 1 1 0 0 1 0 0 0 ...</span>
+  <span class="va">X</span> <span class="op">&lt;-</span> <span class="va">dat</span><span class="op">$</span><span class="va">X</span> <span class="co"># this is the data in form of matrix</span>
+  <span class="co"># set variables' type, 'gaussian' means there is  continous variable type.</span>
+  <span class="va">types</span> <span class="op">&lt;-</span> <span class="va">dat</span><span class="op">$</span><span class="va">types</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">X</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  0  1  2  3  4  5  6  8 11 </span>
 <span class="co">#&gt; 52 61 34 26 14  8  3  1  1</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">X</span><span class="op">[</span>, <span class="fl">200</span><span class="op">]</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">X</span><span class="op">[</span>, <span class="fl">200</span><span class="op">]</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;   0   1 </span>
 <span class="co">#&gt; 108  92</span>
   <span class="co"># user-specified q=2</span>
-  <span class="va">gfm2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gfm.html">gfm</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">X</span>, <span class="va">group</span>, <span class="va">type</span>, dropout <span class="op">=</span> <span class="fl">2</span>, q<span class="op">=</span><span class="fl">2</span>, output <span class="op">=</span> <span class="cn">FALSE</span>, maxIter<span class="op">=</span><span class="fl">5</span><span class="op">)</span>
-<span class="co">#&gt; Starting the alternate minimization algorithm...</span>
-<span class="co">#&gt; Finish the iterative algorithm...</span>
+  <span class="va">gfm2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gfm.html">gfm</a></span><span class="op">(</span><span class="va">XList</span>, <span class="va">types</span>,  q<span class="op">=</span><span class="fl">2</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="co">#&gt; Starting the varitional EM algorithm...</span>
+<span class="co">#&gt; Finish the varitional EM algorithm...</span>
   <span class="fu"><a href="../reference/measurefun.html">measurefun</a></span><span class="op">(</span><span class="va">gfm2</span><span class="op">$</span><span class="va">hH</span>, <span class="va">dat</span><span class="op">$</span><span class="va">H0</span>, type<span class="op">=</span><span class="st">'ccor'</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.9520175</span>
+<span class="co">#&gt; [1] 0.9897383</span>
   <span class="fu"><a href="../reference/measurefun.html">measurefun</a></span><span class="op">(</span><span class="va">gfm2</span><span class="op">$</span><span class="va">hB</span>, <span class="va">dat</span><span class="op">$</span><span class="va">B0</span>, type<span class="op">=</span><span class="st">'ccor'</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.9424346</span></code></pre></div>
+<span class="co">#&gt; [1] 0.9661361</span></code></pre></div>
 <p>Third, we compare the results with that of linear factor models.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">  <span class="co">#  select q automatically</span></a>
-<a class="sourceLine" id="cb13-2" title="2">  gfm2 &lt;-<span class="st"> </span><span class="kw">gfm</span>(dat<span class="op">$</span>X, group, type, <span class="dt">dropout =</span> <span class="dv">2</span>, <span class="dt">q=</span><span class="ot">NULL</span>, <span class="dt">q_set =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">output =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb13-3" title="3"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb13-4" title="4">  <span class="op">|</span><span class="st">                                                                            </span></a>
-<a class="sourceLine" id="cb13-5" title="5"><span class="st">  </span><span class="er">|</span><span class="st">                                                                      </span><span class="er">|</span><span class="st">   </span><span class="dv">0</span>%</a>
-<a class="sourceLine" id="cb13-6" title="6">  <span class="op">|</span><span class="st">                                                                            </span></a>
-<a class="sourceLine" id="cb13-7" title="7"><span class="st">  </span><span class="er">|=======================</span><span class="st">                                               </span><span class="er">|</span><span class="st">  </span><span class="dv">33</span>%</a>
-<a class="sourceLine" id="cb13-8" title="8">  <span class="op">|</span><span class="st">                                                                            </span></a>
-<a class="sourceLine" id="cb13-9" title="9"><span class="st">  </span><span class="er">|===============================================</span><span class="st">                       </span><span class="er">|</span><span class="st">  </span><span class="dv">67</span>%</a>
-<a class="sourceLine" id="cb13-10" title="10">  <span class="op">|</span><span class="st">                                                                            </span></a>
-<a class="sourceLine" id="cb13-11" title="11"><span class="st">  </span><span class="er">|======================================================================|</span><span class="st"> </span><span class="dv">100</span>%</a>
-<a class="sourceLine" id="cb13-12" title="12"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb13-13" title="13"><span class="co">#&gt; The factor number q is estimated as 2.</span></a>
-<a class="sourceLine" id="cb13-14" title="14"><span class="co">#&gt; Starting the alternate minimization algorithm...</span></a>
-<a class="sourceLine" id="cb13-15" title="15"><span class="co">#&gt; Finish the iterative algorithm...</span></a>
-<a class="sourceLine" id="cb13-16" title="16">  <span class="co"># measure the performance of GFM estimators in terms of canonical correlations</span></a>
-<a class="sourceLine" id="cb13-17" title="17">  corH_gfm &lt;-<span class="st"> </span><span class="kw">measurefun</span>(gfm2<span class="op">$</span>hH, dat<span class="op">$</span>H0, <span class="dt">type=</span><span class="st">'ccor'</span>)</a>
-<a class="sourceLine" id="cb13-18" title="18">  corB_gfm &lt;-<span class="st"> </span><span class="kw">measurefun</span>(gfm2<span class="op">$</span>hB, dat<span class="op">$</span>B0, <span class="dt">type=</span><span class="st">'ccor'</span>)</a>
-<a class="sourceLine" id="cb13-19" title="19">  </a></code></pre></div>
-<p>Compare with linear factor models</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R">  <span class="co">#  select q automatically</span>
+  <span class="va">hq</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/chooseFacNumber.html">chooseFacNumber</a></span><span class="op">(</span><span class="va">XList</span>, <span class="va">types</span><span class="op">)</span>
+<span class="co">#&gt; Starting the varitional EM algorithm...</span>
+<span class="co">#&gt; iter = 2, ELBO= -38524.621270, dELBO=0.999982 </span>
+<span class="co">#&gt; iter = 3, ELBO= -37499.741186, dELBO=0.026603 </span>
+<span class="co">#&gt; iter = 4, ELBO= -36984.120121, dELBO=0.013750 </span>
+<span class="co">#&gt; iter = 5, ELBO= -36695.171689, dELBO=0.007813 </span>
+<span class="co">#&gt; iter = 6, ELBO= -36511.614912, dELBO=0.005002 </span>
+<span class="co">#&gt; iter = 7, ELBO= -36391.908896, dELBO=0.003279 </span>
+<span class="co">#&gt; iter = 8, ELBO= -36329.300483, dELBO=0.001720 </span>
+<span class="co">#&gt; iter = 9, ELBO= -36317.674244, dELBO=0.000320 </span>
+<span class="co">#&gt; iter = 10, ELBO= -36341.086816, dELBO=0.000645 </span>
+<span class="co">#&gt; iter = 11, ELBO= -36377.738178, dELBO=0.001009 </span>
+<span class="co">#&gt; iter = 12, ELBO= -36414.087790, dELBO=0.000999 </span>
+<span class="co">#&gt; iter = 13, ELBO= -36444.850181, dELBO=0.000845 </span>
+<span class="co">#&gt; iter = 14, ELBO= -36467.836776, dELBO=0.000631 </span>
+<span class="co">#&gt; iter = 15, ELBO= -36484.431393, dELBO=0.000455 </span>
+<span class="co">#&gt; iter = 16, ELBO= -36501.899955, dELBO=0.000479 </span>
+<span class="co">#&gt; iter = 17, ELBO= -36523.432349, dELBO=0.000590 </span>
+<span class="co">#&gt; iter = 18, ELBO= -36544.317402, dELBO=0.000572 </span>
+<span class="co">#&gt; iter = 19, ELBO= -36562.447734, dELBO=0.000496 </span>
+<span class="co">#&gt; iter = 20, ELBO= -36577.695966, dELBO=0.000417 </span>
+<span class="co">#&gt; iter = 21, ELBO= -36590.249676, dELBO=0.000343 </span>
+<span class="co">#&gt; iter = 22, ELBO= -36600.340939, dELBO=0.000276 </span>
+<span class="co">#&gt; iter = 23, ELBO= -36608.207081, dELBO=0.000215 </span>
+<span class="co">#&gt; iter = 24, ELBO= -36614.078930, dELBO=0.000160 </span>
+<span class="co">#&gt; iter = 25, ELBO= -36618.174944, dELBO=0.000112 </span>
+<span class="co">#&gt; iter = 26, ELBO= -36620.698118, dELBO=0.000069</span>
+<span class="co">#&gt; Finish the varitional EM algorithm...</span>
+<span class="co">#&gt; Eigevalue ratio test estimates the factor number q  as 2.</span>
+  <span class="co"># measure the performance of GFM estimators in terms of canonical correlations</span>
+  <span class="va">corH_gfm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/measurefun.html">measurefun</a></span><span class="op">(</span><span class="va">gfm2</span><span class="op">$</span><span class="va">hH</span>, <span class="va">dat</span><span class="op">$</span><span class="va">H0</span>, type<span class="op">=</span><span class="st">'ccor'</span><span class="op">)</span>
+  <span class="va">corB_gfm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/measurefun.html">measurefun</a></span><span class="op">(</span><span class="va">gfm2</span><span class="op">$</span><span class="va">hB</span>, <span class="va">dat</span><span class="op">$</span><span class="va">B0</span>, type<span class="op">=</span><span class="st">'ccor'</span><span class="op">)</span>
+  </code></pre></div>
+<p>Compare with linear factor models</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R">  <span class="va">lfm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Factorm.html">Factorm</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">X</span>, q<span class="op">=</span><span class="fl">3</span><span class="op">)</span>
   <span class="va">corH_lfm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/measurefun.html">measurefun</a></span><span class="op">(</span><span class="va">lfm1</span><span class="op">$</span><span class="va">hH</span>, <span class="va">dat</span><span class="op">$</span><span class="va">H0</span>, type<span class="op">=</span><span class="st">'ccor'</span><span class="op">)</span>
   <span class="va">corB_lfm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/measurefun.html">measurefun</a></span><span class="op">(</span><span class="va">lfm1</span><span class="op">$</span><span class="va">hB</span>, <span class="va">dat</span><span class="op">$</span><span class="va">B0</span>, type<span class="op">=</span><span class="st">'ccor'</span><span class="op">)</span>
   
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
-  <span class="va">df1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>CCor<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">corH_gfm</span>, <span class="va">corH_lfm</span>, <span class="va">corB_gfm</span>, <span class="va">corB_lfm</span><span class="op">)</span>,
-                    Method <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'GFM'</span>, <span class="st">"LFM"</span><span class="op">)</span>, times<span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>,
-                    Quantity<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">'factors'</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">df1</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Quantity</span>, y<span class="op">=</span><span class="va">CCor</span>, fill<span class="op">=</span><span class="va">Method</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span>, stat<span class="op">=</span><span class="st">"identity"</span>,width <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
-<p><img src="GFM.Simu_files/figure-html/unnamed-chunk-15-1.png" width="700"> ## Session information</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; R version 4.0.3 (2020-10-10)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+  <span class="va">df1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>CCor<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">corH_gfm</span>, <span class="va">corH_lfm</span>, <span class="va">corB_gfm</span>, <span class="va">corB_lfm</span><span class="op">)</span>,
+                    Method <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'GFM'</span>, <span class="st">"LFM"</span><span class="op">)</span>, times<span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>,
+                    Quantity<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">'factors'</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"loadings"</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">df1</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Quantity</span>, y<span class="op">=</span><span class="va">CCor</span>, fill<span class="op">=</span><span class="va">Method</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span>, stat<span class="op">=</span><span class="st">"identity"</span>,width <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
+<p><img src="GFM.Simu_files/figure-html/unnamed-chunk-16-1.png" width="700"> ## Session information</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; R version 4.1.2 (2021-11-01)</span>
 <span class="co">#&gt; Platform: x86_64-w64-mingw32/x64 (64-bit)</span>
-<span class="co">#&gt; Running under: Windows 10 x64 (build 22000)</span>
+<span class="co">#&gt; Running under: Windows 10 x64 (build 22621)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Matrix products: default</span>
 <span class="co">#&gt; </span>
@@ -348,24 +392,25 @@
 <span class="co">#&gt; [8] base     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt; [1] ggplot2_3.3.5    GFM_1.1.0        doSNOW_1.0.19    snow_0.4-4      </span>
-<span class="co">#&gt; [5] iterators_1.0.13 foreach_1.5.1   </span>
+<span class="co">#&gt; [1] ggplot2_3.3.6    GFM_1.2.0        doSNOW_1.0.20    snow_0.4-4      </span>
+<span class="co">#&gt; [5] iterators_1.0.14 foreach_1.5.2    irlba_2.3.5      Matrix_1.4-0    </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
-<span class="co">#&gt;  [1] tidyselect_1.1.1  xfun_0.28         bslib_0.3.1       purrr_0.3.4      </span>
-<span class="co">#&gt;  [5] colorspace_2.0-2  vctrs_0.3.8       generics_0.1.1    htmltools_0.5.2  </span>
-<span class="co">#&gt;  [9] yaml_2.2.1        utf8_1.2.2        rlang_0.4.11      pkgdown_1.6.1    </span>
-<span class="co">#&gt; [13] jquerylib_0.1.4   pillar_1.6.4      glue_1.4.2        withr_2.4.3      </span>
-<span class="co">#&gt; [17] DBI_1.1.1         lifecycle_1.0.1   stringr_1.4.0     munsell_0.5.0    </span>
-<span class="co">#&gt; [21] gtable_0.3.0      ragg_1.1.3        codetools_0.2-18  memoise_2.0.0    </span>
-<span class="co">#&gt; [25] evaluate_0.14     labeling_0.4.2    knitr_1.36        fastmap_1.1.0    </span>
-<span class="co">#&gt; [29] fansi_0.5.0       highr_0.9         scales_1.1.1      cachem_1.0.6     </span>
-<span class="co">#&gt; [33] desc_1.3.0        jsonlite_1.7.2    farver_2.1.0      systemfonts_1.0.2</span>
-<span class="co">#&gt; [37] fs_1.5.2          textshaping_0.3.5 digest_0.6.28     stringi_1.7.5    </span>
-<span class="co">#&gt; [41] dplyr_1.0.7       grid_4.0.3        rprojroot_2.0.2   tools_4.0.3      </span>
-<span class="co">#&gt; [45] magrittr_2.0.1    sass_0.4.0        tibble_3.1.5      crayon_1.4.2     </span>
-<span class="co">#&gt; [49] pkgconfig_2.0.3   MASS_7.3-53.1     ellipsis_0.3.2    assertthat_0.2.1 </span>
-<span class="co">#&gt; [53] rmarkdown_2.7     R6_2.5.1          compiler_4.0.3</span></code></pre></div>
+<span class="co">#&gt;  [1] tidyselect_1.1.2  xfun_0.29         bslib_0.3.1       purrr_0.3.4      </span>
+<span class="co">#&gt;  [5] lattice_0.20-45   generics_0.1.2    colorspace_2.0-3  vctrs_0.4.1      </span>
+<span class="co">#&gt;  [9] htmltools_0.5.2   yaml_2.3.6        utf8_1.2.2        rlang_1.0.2      </span>
+<span class="co">#&gt; [13] pkgdown_2.0.6     jquerylib_0.1.4   pillar_1.7.0      withr_2.5.0      </span>
+<span class="co">#&gt; [17] DBI_1.1.2         glue_1.6.2        lifecycle_1.0.1   stringr_1.4.0    </span>
+<span class="co">#&gt; [21] munsell_0.5.0     gtable_0.3.0      ragg_1.2.2        codetools_0.2-18 </span>
+<span class="co">#&gt; [25] memoise_2.0.1     evaluate_0.15     labeling_0.4.2    knitr_1.37       </span>
+<span class="co">#&gt; [29] fastmap_1.1.0     fansi_1.0.3       highr_0.9         Rcpp_1.0.10      </span>
+<span class="co">#&gt; [33] scales_1.2.0      cachem_1.0.6      desc_1.4.0        jsonlite_1.8.0   </span>
+<span class="co">#&gt; [37] farver_2.1.0      systemfonts_1.0.4 fs_1.5.2          textshaping_0.3.6</span>
+<span class="co">#&gt; [41] digest_0.6.29     stringi_1.7.6     dplyr_1.0.9       grid_4.1.2       </span>
+<span class="co">#&gt; [45] rprojroot_2.0.3   cli_3.2.0         tools_4.1.2       magrittr_2.0.3   </span>
+<span class="co">#&gt; [49] sass_0.4.1        tibble_3.1.7      crayon_1.5.1      pkgconfig_2.0.3  </span>
+<span class="co">#&gt; [53] MASS_7.3-55       ellipsis_0.3.2    assertthat_0.2.1  rmarkdown_2.11   </span>
+<span class="co">#&gt; [57] rstudioapi_0.13   R6_2.5.1          compiler_4.1.2</span></code></pre></div>
 </div>
 </div>
   </div>
@@ -381,11 +426,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Wei Liu, Huazhen Lin, Shurong Zheng, Jin Liu.</p>
+  <p></p>
+<p>Developed by Wei Liu, Huazhen Lin, Shurong Zheng, Jin Liu.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -393,6 +440,8 @@
 
   
 
+
+  
 
   </body>
 </html>

@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">GFM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -65,7 +61,14 @@
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/feiyoung/GFM/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -81,7 +84,7 @@
       <h1 data-toc-skip>GFM</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/feiyoung/GFM/blob/HEAD/vignettes/RGFM.Rmd" class="external-link"><code>vignettes/RGFM.Rmd</code></a></small>
       <div class="hidden name"><code>RGFM.Rmd</code></div>
 
     </div>
@@ -89,13 +92,13 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">GFM</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/feiyoung/GFM" class="external-link">GFM</a></span><span class="op">)</span>
+<span class="co">#&gt; Loading required package: irlba</span>
+<span class="co">#&gt; Loading required package: Matrix</span>
 <span class="co">#&gt; Loading required package: doSNOW</span>
-<span class="co">#&gt; Warning: package 'doSNOW' was built under R version 4.0.5</span>
 <span class="co">#&gt; Loading required package: foreach</span>
 <span class="co">#&gt; Loading required package: iterators</span>
 <span class="co">#&gt; Loading required package: snow</span>
-<span class="co">#&gt; Warning: package 'snow' was built under R version 4.0.5</span>
 <span class="co">#&gt; Loading required package: parallel</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Attaching package: 'parallel'</span>
@@ -104,7 +107,13 @@
 <span class="co">#&gt;     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,</span>
 <span class="co">#&gt;     clusterExport, clusterMap, clusterSplit, makeCluster, parApply,</span>
 <span class="co">#&gt;     parCapply, parLapply, parRapply, parSapply, splitIndices,</span>
-<span class="co">#&gt;     stopCluster</span></code></pre></div>
+<span class="co">#&gt;     stopCluster</span>
+<span class="co">#&gt; GFM :  Generalized factor model is implemented for ultra-high dimensional data with mixed-type variables.</span>
+<span class="co">#&gt; Two algorithms, variational EM and alternate maximization, are designed to implement the generalized factor model,</span>
+<span class="co">#&gt; respectively. The factor matrix and loading matrix together with the number of factors can be well estimated.</span>
+<span class="co">#&gt; This model can be employed in social and behavioral sciences, economy and finance, and  genomics,</span>
+<span class="co">#&gt; to extract interpretable nonlinear factors. More details can be referred to</span>
+<span class="co">#&gt; Wei Liu, Huazhen Lin, Shurong Zheng and Jin Liu. (2021) &lt;doi:10.1080/01621459.2021.1999818&gt;.   Check out our Package website (https://feiyoung.github.io/GFM/docs/index.html) for a more complete description of the methods and analyses</span></code></pre></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -116,11 +125,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Wei Liu, Huazhen Lin, Shurong Zheng, Jin Liu.</p>
+  <p></p>
+<p>Developed by Wei Liu, Huazhen Lin, Shurong Zheng, Jin Liu.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -128,6 +139,8 @@
 
   
 
+
+  
 
   </body>
 </html>

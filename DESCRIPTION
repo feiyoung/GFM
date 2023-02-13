@@ -1,8 +1,8 @@
 Package: GFM
 Type: Package
 Title: Generalized Factor Model
-Version: 1.1.0
-Date: 2021-12-24
+Version: 1.2.0
+Date: 2023-02-13
 License: GPL-3
 Authors@R: 
     c(person(given = "Wei",
@@ -20,17 +20,20 @@ Authors@R:
              role = "aut"))
 Author: Wei Liu [aut, cre], Huazhen Lin [aut], Shurong Zheng [aut], Jin Liu [aut]
 Maintainer: Wei Liu <weiliu@smail.swufe.edu.cn>
-Description:  Generalized factor model for ultra-high dimensional variables with mixed types.
-    We develop a two-step iterative procedure so that each update can be 
-    carried out in parallel across all variables and samples. The fast 
-    computation version is provided for ultra-high dimensional data,
-    see examples for more details. More details can be referred to 
+Description:  Generalized factor model is implemented for ultra-high dimensional data with mixed-type variables.
+    Two algorithms, variational EM and alternate maximization, are designed to implement the generalized factor model,
+    respectively. The factor matrix and loading matrix together with the number of factors can be well estimated. 
+    This model can be employed in social and behavioral sciences, economy and finance, and  genomics, 
+    to extract interpretable nonlinear factors. More details can be referred to 
     Wei Liu, Huazhen Lin, Shurong Zheng and Jin Liu. (2021) <doi:10.1080/01621459.2021.1999818>. 
 URL: https://github.com/feiyoung/GFM
 BugReports:   https://github.com/feiyoung/GFM/issues
-Depends: doSNOW, parallel,  R (>= 3.5.0)
+Depends: irlba, doSNOW, parallel,  R (>= 3.5.0)
 Imports: MASS, stats
 Suggests: knitr, rmarkdown
+LinkingTo: 
+    Rcpp,
+    RcppArmadillo
 VignetteBuilder: knitr
 Encoding: UTF-8
 RoxygenNote: 7.1.1

@@ -1,11 +1,15 @@
-export(gfm, singleIC,  Factorm,
+
+useDynLib(GFM, .registration=TRUE)
+importFrom(Rcpp, evalCpp)
+
+export(gfm, chooseFacNumber, Factorm,
        measurefun, gendata)
 
 importFrom(MASS, mvrnorm)
 importFrom("stats", "binomial", "cancor", "cov", "dpois", "gaussian",
-             "glm.fit", "poisson", "rbinom", "rnorm", "rpois", "runif",
-             "var")
+           "glm.fit", "poisson", "rbinom", "rnorm", "rpois", "runif",
+           "var")
 importFrom("utils", "setTxtProgressBar", "txtProgressBar")
 # importFrom("foreach", "foreach")
-import(parallel)
+importFrom(irlba, irlba)
 import(doSNOW)

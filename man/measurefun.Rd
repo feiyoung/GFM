@@ -25,6 +25,6 @@
 
 \examples{
   dat <- gendata(n = 100, p = 200, q=2, rho=3)
-  res <- Factorm(dat$X)
+  res <- Factorm(dat$XList[[1]])
   measurefun(res$hB, dat$B0)
 }

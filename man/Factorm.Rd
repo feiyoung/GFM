@@ -38,5 +38,4 @@
   res <- Factorm(dat$X)
   measurefun(res$hH, dat$H0) # the smallest canonical correlation
 }
-\keyword{Factor}
-\keyword{Feature}
+

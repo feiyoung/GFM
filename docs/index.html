@@ -12,18 +12,20 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Generalized Factor Model">
-<meta property="og:description" content="Generalized factor model for ultra-high dimensional variables with mixed types.
-    We develop a two-step iterative procedure so that each update can be 
-    carried out parallelly across all variables and samples. The fast 
-    computation version is provided for ultra-high dimensional data,
-    see examples for more details. More details can be referred to 
-    Wei Liu, Huazhen Lin, Shurong Zheng and Jin Liu. (2021) &lt;doi:https://doi.org/10.1080/01621459.2021.1999818&gt;. ">
+<meta property="og:description" content="Generalized factor model is implemented for ultra-high dimensional data with mixed-type variables.
+    Two algorithms, variational EM and alternate maximization, are designed to implement the generalized factor model,
+    respectively. The factor matrix and loading matrix together with the number of factors can be well estimated. 
+    This model can be employed in social and behavioral sciences, economy and finance, and  genomics, 
+    to extract interpretable nonlinear factors. More details can be referred to 
+    Wei Liu, Huazhen Lin, Shurong Zheng and Jin Liu. (2021) &lt;doi:10.1080/01621459.2021.1999818&gt;. ">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -36,18 +38,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">GFM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -70,7 +66,14 @@
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/feiyoung/GFM/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -83,38 +86,66 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="gfm" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#gfm" class="anchor"></a>GFM</h1></div>
-<p>Generalized factor model for ultra-high dimensional variables with mixed types –R version</p>
+<div class="section level1">
+<div class="page-header"><h1 id="-gfm"># GFM<a class="anchor" aria-label="anchor" href="#-gfm"></a>
+</h1></div>
+<!-- badges: start -->
+<p>GFM: Generalized factor model for ultra-high dimensional variables with mixed types.</p>
+<p>GFM is a package for analyzing the (ultra)high dimensional data with mixed-type variables, developed by the Huazhen Lin’s lab. It is not only computationally efficient and scalable to the sample size increment, but also is capable of choosing the number of factors. Two algorithms, variational EM and alternate maximization, are designed to implement the generalized factor model, respectively, which ensures that the factor matrix and loading matrix together with the number of factors can be well estimated.</p>
+<p>Check out our <a href="https://www.tandfonline.com/doi/abs/10.1080/01621459.2021.1999818?journalCode=uasa20" class="external-link">JASA paper</a> and our <a href="https://feiyoung.github.io/GFM/docs/index.html" class="external-link">Package vignette</a> for a more complete description of the methods and analyses.</p>
+<p>GFM can be used to analyze experimental dataset from different areas, for instance:</p>
+<ul>
+<li>Social and behavioral sciences</li>
+<li>Economy and finance</li>
+<li>Genomics…</li>
+</ul>
 <p>Please see our new paper for model details:</p>
-<p><a href="https://www.tandfonline.com/doi/abs/10.1080/01621459.2021.1999818?journalCode=uasa20">Wei Liu, Huazhen Lin, Shurong Zheng &amp; Jin Liu (2021) . Generalized factor model for ultra-high dimensional mixed data. Journal of the American Statistics Association (Online).</a></p>
+<p><a href="https://www.tandfonline.com/doi/abs/10.1080/01621459.2021.1999818?journalCode=uasa20" class="external-link">Wei Liu, Huazhen Lin, Shurong Zheng &amp; Jin Liu (2021) . Generalized factor model for ultra-high dimensional mixed data. Journal of the American Statistics Association (Online).</a></p>
 </div>
-<div id="installation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h1>
-<p>To install the the packages “GFM”, firstly, install the ‘remotes’ package.</p>
-<pre class="{rmd}"><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("remotes")
-remotes::install_github("feiyoung/RGFM")</a></code></pre>
-<p>Besides, this package also has the MATLAB version at <a href="https://github.com/feiyoung/GFM">https://github.com/feiyoung/GFM</a>, which runs faster in MATLAB environment.</p>
+<div class="section level1">
+<h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h1>
+<p>To install the the packages ‘GFM’ from ‘Github’, firstly, install the ‘remotes’ package.</p>
+<pre class="{rmd}"><code><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"feiyoung/GFM"</span><span class="op">)</span></code></pre>
+<p>Or install the the packages “GFM” from ‘CRAN’</p>
+<pre class="{rmd}"><code><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"GFM"</span><span class="op">)</span></code></pre>
 </div>
-<div id="demonstration" class="section level1">
-<h1 class="hasAnchor">
-<a href="#demonstration" class="anchor"></a>Demonstration</h1>
-<p>For an example of typical GFM usage, please see our <a href="https://feiyoung.github.io/GFM/docs/index.html">Package vignette</a> for a demonstration and overview of the functions included in GFM.</p>
+<div class="section level1">
+<h1 id="demonstration">Demonstration<a class="anchor" aria-label="anchor" href="#demonstration"></a>
+</h1>
+<p>For an example of typical GFM usage, please see our <a href="https://feiyoung.github.io/GFM/docs/index.html" class="external-link">Package vignette</a> for a demonstration and overview of the functions included in GFM.</p>
 </div>
 
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="license">
-<h2>License</h2>
+    <div class="links">
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
+<li><a href="https://cloud.r-project.org/package=GFM" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/feiyoung/GFM/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/feiyoung/GFM/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
+<div class="license">
+<h2 data-toc-skip>License</h2>
+<ul class="list-unstyled">
+<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
+</ul>
+</div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing GFM</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Wei Liu <br><small class="roles"> Author, maintainer </small>  </li>
 <li>Huazhen Lin <br><small class="roles"> Author </small>  </li>
@@ -123,16 +154,27 @@ remotes::install_github("feiyoung/RGFM")</a></code></pre>
 </ul>
 </div>
 
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://cran.r-project.org/package=GFM" class="external-link"><img src="https://www.r-pkg.org/badges/version-ago/GFM"></a></li>
+<li><a href="https://cran.r-project.org/package=GFM" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/GFM?color=orange"></a></li>
+<li><a href="https://cran.r-project.org/package=GFM" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/GFM?color=orange"></a></li>
+</ul>
+</div>
+
   </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Wei Liu, Huazhen Lin, Shurong Zheng, Jin Liu.</p>
+  <p></p>
+<p>Developed by Wei Liu, Huazhen Lin, Shurong Zheng, Jin Liu.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -140,6 +182,8 @@ remotes::install_github("feiyoung/RGFM")</a></code></pre>
 
   
 
+
+  
 
   </body>
 </html>

@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">GFM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -65,7 +61,14 @@
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/feiyoung/GFM/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -79,79 +82,69 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>GFM: A Simple Transcriptomics Data</h1>
-                        <h4 class="author">Wei Liu</h4>
+                        <h4 data-toc-skip class="author">Wei Liu</h4>
             
-            <h4 class="date">2021-12-25</h4>
+            <h4 data-toc-skip class="date">2023-02-13</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/feiyoung/GFM/blob/HEAD/vignettes/GFM.Brain.Rmd" class="external-link"><code>vignettes/GFM.Brain.Rmd</code></a></small>
       <div class="hidden name"><code>GFM.Brain.Rmd</code></div>
 
     </div>
 
     
     
-<div id="load-real-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#load-real-data" class="anchor"></a>Load real data</h3>
-<p>First, we load the ‘GFM’ package and the real data which can be downloaded at ‘here’ (<a href="https://pan.baidu.com/s/1ralmQYqcW3XatLHbBrMXEw" class="uri">https://pan.baidu.com/s/1ralmQYqcW3XatLHbBrMXEw</a>) and extraction code being ‘sppy’. This data is in the format of ‘.Rdata’ that inludes a gene expression matrix ‘X’ with 3460 rows (cells) and 2000 columns (genes), a vector ‘group’ specifying two groups of variable types (‘type’ variable) including ‘gaussian’ and ‘poisson’ and a vector ‘y’ meaning the clusters of cells annotated by experts. We compare the performance of ‘GFM’ and ‘LFM’ in downstream clustering analysis based on the benchchmarked clusters ‘y’.</p>
+<div class="section level3">
+<h3 id="load-real-data">Load real data<a class="anchor" aria-label="anchor" href="#load-real-data"></a>
+</h3>
+<p>First, we load the ‘GFM’ package and the real data which can be downloaded <a href="xxx">here</a>. This data is in the format of ‘.Rdata’ that inludes a gene expression matrix ‘X’ with 3460 rows (cells) and 2000 columns (genes), a vector ‘group’ specifying two groups of variable types (‘type’ variable) including ‘gaussian’ and ‘poisson’ and a vector ‘y’ meaning the clusters of cells annotated by experts. We compare the performance of ‘GFM’ and ‘LFM’ in downstream clustering analysis based on the benchchmarked clusters ‘y’.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st">"GFM"</span><span class="op">)</span>
-<span class="co">#&gt; Loading required package: doSNOW</span>
-<span class="co">#&gt; Warning: package 'doSNOW' was built under R version 4.0.5</span>
-<span class="co">#&gt; Loading required package: foreach</span>
-<span class="co">#&gt; Loading required package: iterators</span>
-<span class="co">#&gt; Loading required package: snow</span>
-<span class="co">#&gt; Warning: package 'snow' was built under R version 4.0.5</span>
-<span class="co">#&gt; Loading required package: parallel</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'parallel'</span>
-<span class="co">#&gt; The following objects are masked from 'package:snow':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,</span>
-<span class="co">#&gt;     clusterExport, clusterMap, clusterSplit, makeCluster, parApply,</span>
-<span class="co">#&gt;     parCapply, parLapply, parRapply, parSapply, splitIndices,</span>
-<span class="co">#&gt;     stopCluster</span>
-<span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"D:\\Dropbox\\MixImpute\\Rcode\\RealData\\BrainSTdata\\Brain76.Rdata"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span> <span class="co"># check the variables</span>
-<span class="co">#&gt; [1] "group" "type"  "X"     "y"</span></code></pre></div>
-</div>
-<div id="fit-gfm-model" class="section level3">
-<h3 class="hasAnchor">
-<a href="#fit-gfm-model" class="anchor"></a>Fit GFM model</h3>
-<p>We fit the GFM model using ‘gfm’ function.</p>
+<code class="sourceCode R"><span class="va">githubURL</span> <span class="op">&lt;-</span> <span class="st">"https://github.com/feiyoung/GFM/blob/main/vignettes_data/Brain76.Rdata?raw=true"</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="va">githubURL</span>,<span class="st">"Brain76.Rdata"</span>,mode<span class="op">=</span><span class="st">'wb'</span><span class="op">)</span></code></pre></div>
+<p>Then load to R</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">q</span> <span class="op">&lt;-</span> <span class="fl">15</span>
-<span class="va">gfm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gfm.html">gfm</a></span><span class="op">(</span><span class="va">X</span>, <span class="va">group</span>, <span class="va">type</span>, q<span class="op">=</span> <span class="va">q</span>, output <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="co">#&gt; Starting the alternate minimization algorithm...</span>
-<span class="co">#&gt; Finish the iterative algorithm...</span></code></pre></div>
-</div>
-<div id="compare-with-lfm-in-downstream-analysis" class="section level3">
-<h3 class="hasAnchor">
-<a href="#compare-with-lfm-in-downstream-analysis" class="anchor"></a>Compare with LFM in downstream analysis</h3>
-<p>We conduct the clustering analysis based on the extracted factors by GFM and evaluate the adjusted rand index (ARI) value based on the annotated cluster labels by experts.</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"Brain76.Rdata"</span><span class="op">)</span>
+<span class="va">XList</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">X</span><span class="op">[</span>,<span class="va">group</span><span class="op">==</span><span class="fl">1</span><span class="op">]</span>, <span class="va">X</span><span class="op">[</span>,<span class="va">group</span><span class="op">==</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span>
+<span class="va">types</span> <span class="op">&lt;-</span> <span class="va">type</span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">hH</span> <span class="op">&lt;-</span> <span class="va">gfm1</span><span class="op">$</span><span class="va">hH</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mclust-org.github.io/mclust/">mclust</a></span><span class="op">)</span>
-<span class="co">#&gt; Warning: package 'mclust' was built under R version 4.0.5</span>
-<span class="co">#&gt; Package 'mclust' version 5.4.8</span>
-<span class="co">#&gt; Type 'citation("mclust")' for citing this R package in publications.</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
-<span class="va">gmm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mclust-org.github.io/mclust/reference/Mclust.html">Mclust</a></span><span class="op">(</span><span class="va">hH</span>, G<span class="op">=</span><span class="fl">7</span><span class="op">)</span>
-<span class="va">ARI_gfm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mclust-org.github.io/mclust/reference/adjustedRandIndex.html">adjustedRandIndex</a></span><span class="op">(</span><span class="va">gmm1</span><span class="op">$</span><span class="va">classification</span>, <span class="va">y</span><span class="op">)</span></code></pre></div>
-<p>We fit linear factor model using same number of factors.</p>
+<code class="sourceCode R">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/feiyoung/GFM" class="external-link">"GFM"</a></span><span class="op">)</span>
+<span class="co">#load("vignettes_data\\Brain76.Rdata")</span>
+<span class="co">#ls() # check the variables</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span> <span class="co"># set a random seed for reproducibility.</span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="fit-gfm-model">Fit GFM model<a class="anchor" aria-label="anchor" href="#fit-gfm-model"></a>
+</h3>
+<p>We fit the GFM model using ‘gfm’ function.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">q</span> <span class="op">&lt;-</span> <span class="fl">15</span>
+<span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span>
+  <span class="va">gfm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gfm.html">gfm</a></span><span class="op">(</span><span class="va">XList</span>, <span class="va">types</span>, q<span class="op">=</span> <span class="va">q</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="compare-with-lfm-in-downstream-analysis">Compare with LFM in downstream analysis<a class="anchor" aria-label="anchor" href="#compare-with-lfm-in-downstream-analysis"></a>
+</h3>
+<p>We conduct the clustering analysis based on the extracted factors by GFM and evaluate the adjusted rand index (ARI) value based on the annotated cluster labels by experts.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">hH</span> <span class="op">&lt;-</span> <span class="va">gfm1</span><span class="op">$</span><span class="va">hH</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mclust-org.github.io/mclust/" class="external-link">mclust</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<span class="va">gmm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mclust-org.github.io/mclust/reference/Mclust.html" class="external-link">Mclust</a></span><span class="op">(</span><span class="va">hH</span>, G<span class="op">=</span><span class="fl">7</span><span class="op">)</span>
+<span class="va">ARI_gfm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mclust-org.github.io/mclust/reference/adjustedRandIndex.html" class="external-link">adjustedRandIndex</a></span><span class="op">(</span><span class="va">gmm1</span><span class="op">$</span><span class="va">classification</span>, <span class="va">y</span><span class="op">)</span></code></pre></div>
+<p>We fit linear factor model using same number of factors.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fac</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Factorm.html">Factorm</a></span><span class="op">(</span><span class="va">X</span>, q<span class="op">=</span><span class="fl">15</span><span class="op">)</span>
 <span class="va">hH_lfm</span> <span class="op">&lt;-</span> <span class="va">fac</span><span class="op">$</span><span class="va">hH</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
-<span class="va">gmm2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mclust-org.github.io/mclust/reference/Mclust.html">Mclust</a></span><span class="op">(</span><span class="va">hH_lfm</span>, G<span class="op">=</span><span class="fl">7</span><span class="op">)</span>
-<span class="va">ARI_lfm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mclust-org.github.io/mclust/reference/adjustedRandIndex.html">adjustedRandIndex</a></span><span class="op">(</span><span class="va">gmm2</span><span class="op">$</span><span class="va">classification</span>, <span class="va">y</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<span class="va">gmm2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mclust-org.github.io/mclust/reference/Mclust.html" class="external-link">Mclust</a></span><span class="op">(</span><span class="va">hH_lfm</span>, G<span class="op">=</span><span class="fl">7</span><span class="op">)</span>
+<span class="va">ARI_lfm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mclust-org.github.io/mclust/reference/adjustedRandIndex.html" class="external-link">adjustedRandIndex</a></span><span class="op">(</span><span class="va">gmm2</span><span class="op">$</span><span class="va">classification</span>, <span class="va">y</span><span class="op">)</span></code></pre></div>
 <p>Compare with the ARIs by visualization.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
-<span class="va">df1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>ARI<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">ARI_gfm</span>,<span class="va">ARI_lfm</span><span class="op">)</span>,
-                    Method <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'GFM'</span>, <span class="st">"LFM"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">df1</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Method</span>, y<span class="op">=</span><span class="va">ARI</span>, fill<span class="op">=</span><span class="va">Method</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span>, stat<span class="op">=</span><span class="st">"identity"</span>,width <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
-<p><img src="GFM.Brain_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<span class="va">df1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>ARI<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">ARI_gfm</span>,<span class="va">ARI_lfm</span><span class="op">)</span>,
+                    Method <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'GFM'</span>, <span class="st">"LFM"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">df1</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Method</span>, y<span class="op">=</span><span class="va">ARI</span>, fill<span class="op">=</span><span class="va">Method</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span>, stat<span class="op">=</span><span class="st">"identity"</span>,width <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
 </div>
   </div>
 
@@ -164,11 +157,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Wei Liu, Huazhen Lin, Shurong Zheng, Jin Liu.</p>
+  <p></p>
+<p>Developed by Wei Liu, Huazhen Lin, Shurong Zheng, Jin Liu.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -176,6 +171,8 @@
 
   
 
+
+  
 
   </body>
 </html>

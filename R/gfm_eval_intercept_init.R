@@ -82,28 +82,21 @@ family2func <- function(type){
          binomial = binomial(link = "logit"),
          poisson = poisson(link = "log"))
 }
-paraglmfit <- function(j, Xx, g1, XX, fun1){
-  glm.fit(x=Xx, y=XX[, g1[j]], family = fun1, intercept = FALSE)$coefficients
-}
-localupdateB2 <- function(X, g1, hH, type1, parallel=FALSE){
+# paraglmfit <- function(j, Xx, g1, XX, fun1){
+#   glm.fit(x=Xx, y=XX[, g1[j]], family = fun1, intercept = FALSE)$coefficients
+# }
+
+localupdateB2 <- function(X, g1, hH, type1){
   # g1 <- gcell[[1]]; type1 <- type[1]
   n <- nrow(X);q <- ncol(hH)
   p1 <- length(g1); B1 <- matrix(0, q+1, p1)
   jg <- 1:p1
   fun1 <- family2func(type1)
-  if(parallel){
-
-    # varlist <- c('gfm_eval_intercept_init', 'ICriteria', "Factorm",
-    #              "localupdateB2","family2func","ortheB","Diag",
-    #              "localupdateH2","ortheH", "objfunc","signrevise")
-    varlist <- NULL
-    B1 <- single_parallel(paraglmfit,iterable = jg, varlist= varlist,Xx=cbind(1,hH), g1=g1, XX=X, fun1=fun1)
-  }else{
     for(j in jg){
 
       B1[,j] <- glm.fit(x=cbind(1,hH), y=X[, g1[j]], family = fun1, intercept = FALSE)$coefficients
     }
-  }
+
 
   return(B1)
 }
@@ -113,12 +106,8 @@ paraglmj1fit <- function(i,j, hBm, gcell, w, XX, funj){
           family=funj,offset = hBm[gcell[[j]], 1])$coefficients
 
 }
-paraglmj2fit <- function(i,j, hBm, gcell, XX, funj){
-  glm.fit(hBm[gcell[[j]], -1], XX[i, gcell[[j]]], intercept = FALSE,
-          family=funj,offset = hBm[gcell[[j]], 1])$coefficients
 
-}
-localupdateH2 <- function(X, gcell, hBm, type, dropout, parallel=FALSE){
+localupdateH2 <- function(X, gcell, hBm, type, dropout){
   n <- nrow(X); q <- ncol(hBm)-1; ng <- length(type)
   if(dropout !=0 && length(setdiff(dropout, 1:ng))>0){
     stop('dropout setting is wrong!')
@@ -132,30 +121,15 @@ localupdateH2 <- function(X, gcell, hBm, type, dropout, parallel=FALSE){
     H2 <- matrix(rnorm(q*n), q, n)
     if(type[j] == 'gaussian'){
       w <- 1/ apply(X[,gcell[[j]]], 2, var)
-      if(parallel){
 
-        # varlist <- c('gfm_eval_intercept_init', 'ICriteria', "Factorm",
-        #              "localupdateB2","family2func","ortheB","Diag",
-        #              "localupdateH2","ortheH", "objfunc","signrevise")
-        varlist <- NULL
-        H2 <- single_parallel(paraglmj1fit,iterable = 1:n, varlist= varlist,j=j, hBm=hBm, gcell=gcell,w=w, XX=X, funj=funj)
-
-      }else{
-        for(i in 1:n){ #i <- 1
+      for(i in 1:n){ #i <- 1
           H2[,i] <- glm.fit(hBm[gcell[[j]], -1], X[i, gcell[[j]]], weights = w,intercept = FALSE,
                             family=funj,offset = hBm[gcell[[j]], 1])$coefficients
         }
-      }
+
 
     }else{
-      if(parallel){
 
-        # varlist <- c('gfm_eval_intercept_init', 'ICriteria', "Factorm",
-        #              "localupdateB2","family2func","ortheB","Diag",
-        #              "localupdateH2","ortheH", "objfunc","signrevise")
-        varlist <- NULL
-        H2 <- single_parallel(paraglmj2fit,iterable = 1:n, varlist= varlist,j=j, hBm=hBm, gcell=gcell,XX=X, funj=funj)
-      }else{
         for(i in 1:n){
           try(
             H2[,i] <- glm.fit(hBm[gcell[[j]], -1], X[i, gcell[[j]]],intercept = FALSE,
@@ -163,7 +137,7 @@ localupdateH2 <- function(X, gcell, hBm, type, dropout, parallel=FALSE){
             , silent=TRUE
           )
         }
-      }
+
 
     }
     Harray[,,jj] <- t(H2)
@@ -195,7 +169,7 @@ objfunc <- function(Hm, Bm, X, omega, gcell, type){
 }
 gfm_eval_intercept_init <- function(X, group, type, q,
                                     dropout, eps2, maxIter=10,
-                                    output=0, parallel=FALSE){
+                                    output=0){
   ind_set <- unique(group)
   ng <- length(ind_set)
   if(length(setdiff(1:ng, ind_set))>0){
@@ -224,7 +198,7 @@ gfm_eval_intercept_init <- function(X, group, type, q,
   while(k <= maxIter && dOmega > eps1 && dc >eps2){
     hhB <- NULL
     for(j in 1:ng){
-      B1 <- localupdateB2(X, gcell[[j]], hH, type[j], parallel)
+      B1 <- localupdateB2(X, gcell[[j]], hH, type[j])
       hhB <- cbind(hhB, B1)
     }
     hmu <- hhB[1,]
@@ -241,7 +215,7 @@ gfm_eval_intercept_init <- function(X, group, type, q,
     if(output){
       message('---------- B updation is finished!---------\n')
     }
-    H4 <- localupdateH2(X, gcell, hBm, type, dropout, parallel)
+    H4 <- localupdateH2(X, gcell, hBm, type, dropout)
     hH <- ortheH(H4)# %*% diag(sign(H4[1,]))
     dH <- norm(hH- tmpH, 'F')/norm(hH, 'F')
     tmpH <- hH
@@ -267,6 +241,7 @@ gfm_eval_intercept_init <- function(X, group, type, q,
   history$elapsedTime <- stoc
   return(list(hH=hH, hB=hB, hmu=hmu, history=history))
 }
+
 
 measurefun <- function(hH, H, type='ccor'){
   q <- min(ncol(H), ncol(hH))
