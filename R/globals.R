@@ -1,1 +1,1 @@
-# utils::globalVariables(c("makeSOCKcluster", "%dopar%", "detectCores", "makeCluster", "stopCluster", "foreach"))
+utils::globalVariables(c("makeSOCKcluster", "%dopar%", "detectCores", "makeCluster", "stopCluster", "foreach"))

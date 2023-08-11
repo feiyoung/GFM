@@ -12,8 +12,8 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // VB_GFMcpp
-Rcpp::List VB_GFMcpp(const Rcpp::List& XList, const arma::vec& typeID, const arma::sp_mat& A, const arma::mat& Mu_y_int, const arma::mat& S_y_int, const arma::vec& invLambda_int, const arma::mat& B_int, const arma::rowvec& mu_int, const arma::mat& Mu_h_int, const arma::mat& S_h_int, const arma::mat& Sigma_h_int, const double& epsELBO, const int& maxIter, const bool& verbose);
-RcppExport SEXP _GFM_VB_GFMcpp(SEXP XListSEXP, SEXP typeIDSEXP, SEXP ASEXP, SEXP Mu_y_intSEXP, SEXP S_y_intSEXP, SEXP invLambda_intSEXP, SEXP B_intSEXP, SEXP mu_intSEXP, SEXP Mu_h_intSEXP, SEXP S_h_intSEXP, SEXP Sigma_h_intSEXP, SEXP epsELBOSEXP, SEXP maxIterSEXP, SEXP verboseSEXP) {
+Rcpp::List VB_GFMcpp(const Rcpp::List& XList, const arma::vec& typeID, const arma::sp_mat& A, const arma::mat& Mu_y_int, const arma::mat& S_y_int, const arma::vec& invLambda_int, const arma::mat& B_int, const arma::rowvec& mu_int, const arma::mat& H_int, const double& epsELBO, const int& maxIter, const bool& verbose);
+RcppExport SEXP _GFM_VB_GFMcpp(SEXP XListSEXP, SEXP typeIDSEXP, SEXP ASEXP, SEXP Mu_y_intSEXP, SEXP S_y_intSEXP, SEXP invLambda_intSEXP, SEXP B_intSEXP, SEXP mu_intSEXP, SEXP H_intSEXP, SEXP epsELBOSEXP, SEXP maxIterSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -25,19 +25,17 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::vec& >::type invLambda_int(invLambda_intSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type B_int(B_intSEXP);
     Rcpp::traits::input_parameter< const arma::rowvec& >::type mu_int(mu_intSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type Mu_h_int(Mu_h_intSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type S_h_int(S_h_intSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type Sigma_h_int(Sigma_h_intSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type H_int(H_intSEXP);
     Rcpp::traits::input_parameter< const double& >::type epsELBO(epsELBOSEXP);
     Rcpp::traits::input_parameter< const int& >::type maxIter(maxIterSEXP);
     Rcpp::traits::input_parameter< const bool& >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(VB_GFMcpp(XList, typeID, A, Mu_y_int, S_y_int, invLambda_int, B_int, mu_int, Mu_h_int, S_h_int, Sigma_h_int, epsELBO, maxIter, verbose));
+    rcpp_result_gen = Rcpp::wrap(VB_GFMcpp(XList, typeID, A, Mu_y_int, S_y_int, invLambda_int, B_int, mu_int, H_int, epsELBO, maxIter, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_GFM_VB_GFMcpp", (DL_FUNC) &_GFM_VB_GFMcpp, 14},
+    {"_GFM_VB_GFMcpp", (DL_FUNC) &_GFM_VB_GFMcpp, 12},
     {NULL, NULL, 0}
 };
 

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">GFM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
       </span>
     </div>
 
@@ -35,10 +35,13 @@
       <a href="../articles/GFM.Brain.html">GFM: A Simple Transcriptomics Data</a>
     </li>
     <li>
-      <a href="../articles/GFM.Simu.html">GFM: installation and simulated example</a>
+      <a href="../articles/GFM.Simu.html">Simulated examples: alternate maximization and information criterion</a>
     </li>
     <li>
-      <a href="../articles/RGFM.html">GFM</a>
+      <a href="../articles/GFM.SimuEM.html">Simulated examples: variational EM and singular value ratio</a>
+    </li>
+    <li>
+      <a href="../articles/RGFM.html">Installation</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
@@ -66,7 +69,8 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">chooseFacNumber</span><span class="op">(</span><span class="va">XList</span>, <span class="va">types</span>, q_set <span class="op">=</span> <span class="fl">2</span><span class="op">:</span> <span class="fl">10</span>, select_method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ratio_test"</span>, <span class="st">"IC"</span><span class="op">)</span>,offset<span class="op">=</span><span class="cn">FALSE</span>,
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">chooseFacNumber</span><span class="op">(</span><span class="va">XList</span>, <span class="va">types</span>, q_set <span class="op">=</span> <span class="fl">2</span><span class="op">:</span> <span class="fl">10</span>,
+          select_method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SVR"</span>, <span class="st">"IC"</span><span class="op">)</span>,offset<span class="op">=</span><span class="cn">FALSE</span>,
           dc_eps<span class="op">=</span><span class="fl">1e-4</span>, maxIter<span class="op">=</span><span class="fl">30</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, parallelList<span class="op">=</span><span class="cn">NULL</span><span class="op">)</span></code></pre></div>
     </div>
 
@@ -82,7 +86,10 @@
 <dd><p>a positive integer vector, specify the candidates of factor number q, (optional) default as <code>c(2:10)</code> according to Bai (2013).</p></dd>
 
   <dt>select_method</dt>
-<dd><p>a string, specify the method to choose the  number of factors. Two methods are supported: the eigenvalue ratio test (ratio_test) and information criterion (IC) based methods, default as 'ratio_test'. Empirically, 'ratio_test' is much faster than 'IC', especially for high-dimensional large-scale data.</p></dd>
+<dd><p>a string, specify the method to choose the  number of factors. Two methods are supported: the singular value ratio (SVR) and information criterion (IC) based methods, default as 'SVR'. Empirically, 'SVR' is much faster than 'IC', especially for high-dimensional large-scale data.</p></dd>
+
+   <dt>offset</dt>
+<dd><p>a logical value, whether add an offset term (the total counts for each row in the count component of XList) when there are Poisson variables.</p></dd>
 
   <dt>dc_eps</dt>
 <dd><p>positive real number, specify the tolerance of varing quantity of objective function in the algorithm. Optional parameter with default as <code>1e-4</code>.</p></dd>
@@ -133,7 +140,7 @@
 <span class="r-in">  <span class="va">hq</span> <span class="op">&lt;-</span> <span class="fu">chooseFacNumber</span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">XList</span>, <span class="va">dat</span><span class="op">$</span><span class="va">types</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span>, maxIter<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Starting the varitional EM algorithm...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Finish the varitional EM algorithm...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Eigevalue ratio test estimates the factor number q  as 2. </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The singular value ratio (SVR) method estimates the factor number q  as 2. </span>
 </code></pre></div>
     </div>
   </div>

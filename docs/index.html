@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">GFM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
       </span>
     </div>
 
@@ -58,10 +58,16 @@
       <a href="articles/GFM.Brain.html">GFM: A Simple Transcriptomics Data</a>
     </li>
     <li>
-      <a href="articles/GFM.Simu.html">GFM: installation and simulated example</a>
+      <a href="articles/GFM.Simu.html">GFM: alternate maximization and information criterion</a>
     </li>
     <li>
-      <a href="articles/RGFM.html">GFM</a>
+      <a href="articles/GFM.SimuEM.html">Simulated examples: variational EM and singular value ratio</a>
+    </li>
+    <li>
+      <a href="articles/OverGFM_exam.html">OverGFM: simulated examples</a>
+    </li>
+    <li>
+      <a href="articles/RGFM.html">Installation</a>
     </li>
   </ul>
 </li>
@@ -87,12 +93,13 @@
   <div class="contents col-md-9">
 
 <div class="section level1">
-<div class="page-header"><h1 id="-gfm"># GFM<a class="anchor" aria-label="anchor" href="#-gfm"></a>
+<div class="page-header"><h1 id="gfm">GFM<a class="anchor" aria-label="anchor" href="#gfm"></a>
 </h1></div>
-<!-- badges: start -->
+<p>========================================================================= <!-- badges: start --></p>
+<p><a href="https://cran.r-project.org/package=GFM" class="external-link"><img src="https://www.r-pkg.org/badges/version-ago/GFM"></a> <a href="https://cran.r-project.org/package=GFM" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/GFM?color=orange"></a> <a href="https://cran.r-project.org/package=GFM" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/GFM?color=orange"></a> <!-- badges: end --></p>
 <p>GFM: Generalized factor model for ultra-high dimensional variables with mixed types.</p>
-<p>GFM is a package for analyzing the (ultra)high dimensional data with mixed-type variables, developed by the Huazhen Lin’s lab. It is not only computationally efficient and scalable to the sample size increment, but also is capable of choosing the number of factors. Two algorithms, variational EM and alternate maximization, are designed to implement the generalized factor model, respectively, which ensures that the factor matrix and loading matrix together with the number of factors can be well estimated.</p>
-<p>Check out our <a href="https://www.tandfonline.com/doi/abs/10.1080/01621459.2021.1999818?journalCode=uasa20" class="external-link">JASA paper</a> and our <a href="https://feiyoung.github.io/GFM/docs/index.html" class="external-link">Package vignette</a> for a more complete description of the methods and analyses.</p>
+<p>GFM is a package for analyzing the (ultra)high dimensional data with mixed-type variables, developed by the Huazhen Lin’s lab. It is not only computationally efficient and scalable to the sample size increment, but also is capable of choosing the number of factors. In our JASA paper, a two-step method is proposed to estimate the factor and loading matrix, in which the first step used the alternate maximization (AM) algorithm to obtain initial estimator. In the paper, the information criterion was provided to determine the number of factors. Recently, we proposed an overdispersed generalized factor model (OverGFM) and designed a variational EM algorithm to implement OverGFM. A singular value ratio based method was provided to determine the number of factors. In addition, the estimate from OverGFM can be also used as the initial estimates in the first step for GFMs in our previous JASA paper.</p>
+<p>Check out our <a href="https://www.tandfonline.com/doi/abs/10.1080/01621459.2021.1999818?journalCode=uasa20" class="external-link">JASA paper</a> for alternate maximization and information criterion, and our <a href="https://feiyoung.github.io/GFM/docs/index.html" class="external-link">Package vignette</a> for a more complete description of the usage of GFM and OverGFM.</p>
 <p>GFM can be used to analyze experimental dataset from different areas, for instance:</p>
 <ul>
 <li>Social and behavioral sciences</li>
@@ -115,6 +122,12 @@
 <h1 id="demonstration">Demonstration<a class="anchor" aria-label="anchor" href="#demonstration"></a>
 </h1>
 <p>For an example of typical GFM usage, please see our <a href="https://feiyoung.github.io/GFM/docs/index.html" class="external-link">Package vignette</a> for a demonstration and overview of the functions included in GFM.</p>
+</div>
+<div class="section level1">
+<h1 id="news">NEWs<a class="anchor" aria-label="anchor" href="#news"></a>
+</h1>
+<p>GFM version 1.2.1 (2023-08-10)</p>
+<p>The function <code><a href="reference/overdispersedGFM.html">overdispersedGFM()</a></code> that implements the overdispersed generalized factor model is added. In addition, the function <code><a href="reference/OverGFMchooseFacNumber.html">OverGFMchooseFacNumber()</a></code> is added, which implements singular value ratio (SVR) based method to select the number of factors.</p>
 </div>
 
   </div>
@@ -151,17 +164,11 @@
 <li>Huazhen Lin <br><small class="roles"> Author </small>  </li>
 <li>Shurong Zheng <br><small class="roles"> Author </small>  </li>
 <li>Jin Liu <br><small class="roles"> Author </small>  </li>
+<li>Jinyu Nie <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
 
-<div class="dev-status">
-<h2 data-toc-skip>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://cran.r-project.org/package=GFM" class="external-link"><img src="https://www.r-pkg.org/badges/version-ago/GFM"></a></li>
-<li><a href="https://cran.r-project.org/package=GFM" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/GFM?color=orange"></a></li>
-<li><a href="https://cran.r-project.org/package=GFM" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/GFM?color=orange"></a></li>
-</ul>
-</div>
+
 
   </div>
 </div>
@@ -169,7 +176,7 @@
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Wei Liu, Huazhen Lin, Shurong Zheng, Jin Liu.</p>
+<p>Developed by Wei Liu, Huazhen Lin, Shurong Zheng, Jin Liu, Jinyu Nie.</p>
 </div>
 
 <div class="pkgdown">

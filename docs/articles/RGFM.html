@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GFM • GFM</title>
+<title>Installation • GFM</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="GFM">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Installation">
 <meta property="og:description" content="GFM">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">GFM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
       </span>
     </div>
 
@@ -53,10 +53,16 @@
       <a href="../articles/GFM.Brain.html">GFM: A Simple Transcriptomics Data</a>
     </li>
     <li>
-      <a href="../articles/GFM.Simu.html">GFM: installation and simulated example</a>
+      <a href="../articles/GFM.Simu.html">GFM: alternate maximization and information criterion</a>
     </li>
     <li>
-      <a href="../articles/RGFM.html">GFM</a>
+      <a href="../articles/GFM.SimuEM.html">Simulated examples: variational EM and singular value ratio</a>
+    </li>
+    <li>
+      <a href="../articles/OverGFM_exam.html">OverGFM: simulated examples</a>
+    </li>
+    <li>
+      <a href="../articles/RGFM.html">Installation</a>
     </li>
   </ul>
 </li>
@@ -81,7 +87,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>GFM</h1>
+      <h1 data-toc-skip>Installation</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/feiyoung/GFM/blob/HEAD/vignettes/RGFM.Rmd" class="external-link"><code>vignettes/RGFM.Rmd</code></a></small>
@@ -91,34 +97,26 @@
 
     
     
+<div class="section level2">
+<h2 id="install-the-gfm">Install the GFM<a class="anchor" aria-label="anchor" href="#install-the-gfm"></a>
+</h2>
+<p>This vignette provides an introduction to the R package <code>GFM</code>, where the function <code>gfm</code> implements the model <code>GFM</code>, Generalized Factor Model for ultra-high dimensional variables with mixed types. The estimated factors and loading matrices can be applied to a variaty of downstream analyses, such as cell type clustering in single cell RNA sequencing data analysis and important SNPs identification in GWAS data analysis, among others.</p>
+<p>The package can be installed with the command:</p>
+<p><code><a href="https://remotes.r-lib.org" class="external-link">library(remotes)</a></code></p>
+<p><code>remotes::install_github("feiyoung/GFM")</code></p>
+<p>or</p>
+<p><code>install.packages("GFM")</code></p>
+<p>The package can be loaded with the command:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/feiyoung/GFM" class="external-link">GFM</a></span><span class="op">)</span>
-<span class="co">#&gt; Loading required package: irlba</span>
-<span class="co">#&gt; Loading required package: Matrix</span>
-<span class="co">#&gt; Loading required package: doSNOW</span>
-<span class="co">#&gt; Loading required package: foreach</span>
-<span class="co">#&gt; Loading required package: iterators</span>
-<span class="co">#&gt; Loading required package: snow</span>
-<span class="co">#&gt; Loading required package: parallel</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'parallel'</span>
-<span class="co">#&gt; The following objects are masked from 'package:snow':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,</span>
-<span class="co">#&gt;     clusterExport, clusterMap, clusterSplit, makeCluster, parApply,</span>
-<span class="co">#&gt;     parCapply, parLapply, parRapply, parSapply, splitIndices,</span>
-<span class="co">#&gt;     stopCluster</span>
-<span class="co">#&gt; GFM :  Generalized factor model is implemented for ultra-high dimensional data with mixed-type variables.</span>
-<span class="co">#&gt; Two algorithms, variational EM and alternate maximization, are designed to implement the generalized factor model,</span>
-<span class="co">#&gt; respectively. The factor matrix and loading matrix together with the number of factors can be well estimated.</span>
-<span class="co">#&gt; This model can be employed in social and behavioral sciences, economy and finance, and  genomics,</span>
-<span class="co">#&gt; to extract interpretable nonlinear factors. More details can be referred to</span>
-<span class="co">#&gt; Wei Liu, Huazhen Lin, Shurong Zheng and Jin Liu. (2021) &lt;doi:10.1080/01621459.2021.1999818&gt;.   Check out our Package website (https://feiyoung.github.io/GFM/docs/index.html) for a more complete description of the methods and analyses</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/feiyoung/GFM" class="external-link">"GFM"</a></span><span class="op">)</span></code></pre></div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 

@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">GFM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
       </span>
     </div>
 
@@ -53,10 +53,13 @@
       <a href="../articles/GFM.Brain.html">GFM: A Simple Transcriptomics Data</a>
     </li>
     <li>
-      <a href="../articles/GFM.Simu.html">GFM: installation and simulated example</a>
+      <a href="../articles/GFM.Simu.html">Simulated examples: alternate maximization and information criterion</a>
     </li>
     <li>
-      <a href="../articles/RGFM.html">GFM</a>
+      <a href="../articles/GFM.SimuEM.html">Simulated examples: variational EM and singular value ratio</a>
+    </li>
+    <li>
+      <a href="../articles/RGFM.html">Installation</a>
     </li>
   </ul>
 </li>
@@ -84,7 +87,7 @@
       <h1 data-toc-skip>GFM: A Simple Transcriptomics Data</h1>
                         <h4 data-toc-skip class="author">Wei Liu</h4>
             
-            <h4 data-toc-skip class="date">2023-02-13</h4>
+            <h4 data-toc-skip class="date">2023-06-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/feiyoung/GFM/blob/HEAD/vignettes/GFM.Brain.Rmd" class="external-link"><code>vignettes/GFM.Brain.Rmd</code></a></small>
       <div class="hidden name"><code>GFM.Brain.Rmd</code></div>
@@ -118,8 +121,6 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/feiyoung/GFM" class="external-link">"GFM"</a></span><span class="op">)</span>
-<span class="co">#&gt; Loading required package: irlba</span>
-<span class="co">#&gt; Loading required package: Matrix</span>
 <span class="co">#&gt; Loading required package: doSNOW</span>
 <span class="co">#&gt; Loading required package: foreach</span>
 <span class="co">#&gt; Loading required package: iterators</span>
@@ -184,7 +185,7 @@
 <span class="co">#&gt; iter = 30, ELBO= -2528757.142764, dELBO=0.004493</span>
 <span class="co">#&gt; Finish the varitional EM algorithm...</span>
 <span class="co">#&gt;    user  system elapsed </span>
-<span class="co">#&gt;   72.44    4.25  149.42</span></code></pre></div>
+<span class="co">#&gt;   93.61    5.28  152.44</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="compare-with-lfm-in-downstream-analysis">Compare with LFM in downstream analysis<a class="anchor" aria-label="anchor" href="#compare-with-lfm-in-downstream-analysis"></a>

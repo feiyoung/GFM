@@ -1,8 +1,8 @@
 ---
-title: "GFM"
+title: "Installation"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{GFM}
+  %\VignetteIndexEntry{Installation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -13,7 +13,20 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+## Install the GFM
+This vignette provides an introduction to the R package `GFM`, where the function `gfm` implements the model `GFM`, Generalized Factor Model for ultra-high dimensional variables with mixed types. The estimated factors and loading matrices can be applied to a variaty of downstream analyses, such as cell type clustering in single cell RNA sequencing data analysis and important SNPs identification in GWAS data analysis, among others.
 
-```{r setup}
-library(GFM)
+The package can be installed with the command:
+
+`library(remotes)`
+
+`remotes::install_github("feiyoung/GFM")`
+
+or
+
+`install.packages("GFM")`
+
+The package can be loaded with the command:
+```{r  eval=FALSE}
+library("GFM")
 ```

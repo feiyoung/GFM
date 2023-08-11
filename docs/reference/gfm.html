@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">GFM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
       </span>
     </div>
 
@@ -35,10 +35,13 @@
       <a href="../articles/GFM.Brain.html">GFM: A Simple Transcriptomics Data</a>
     </li>
     <li>
-      <a href="../articles/GFM.Simu.html">GFM: installation and simulated example</a>
+      <a href="../articles/GFM.Simu.html">Simulated examples: alternate maximization and information criterion</a>
     </li>
     <li>
-      <a href="../articles/RGFM.html">GFM</a>
+      <a href="../articles/GFM.SimuEM.html">Simulated examples: variational EM and singular value ratio</a>
+    </li>
+    <li>
+      <a href="../articles/RGFM.html">Installation</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
@@ -67,7 +70,7 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">gfm</span><span class="op">(</span><span class="va">XList</span>, <span class="va">types</span>, q<span class="op">=</span><span class="fl">10</span>, offset<span class="op">=</span><span class="cn">FALSE</span>, dc_eps<span class="op">=</span><span class="fl">1e-4</span>, maxIter<span class="op">=</span><span class="fl">30</span>,
-                verbose <span class="op">=</span> <span class="cn">TRUE</span>, algorithm<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"VEM"</span>, <span class="st">"Alternate_Maximization"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+                verbose <span class="op">=</span> <span class="cn">TRUE</span>, algorithm<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"VEM"</span>, <span class="st">"AM"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -94,7 +97,7 @@
 <dd><p>a logical value with TRUE or FALSE, specify whether ouput the information in iteration process, (optional) default as TRUE.</p></dd>
 
   <dt>algorithm</dt>
-<dd><p>a string, specify the algorithm to be used for fitting model. Now it supports two algorithms: variational EM (VEM) and alternate maximization (Alternate_Maximization) algorithm, default as VEM. Empirically, we observed that VEM is more robust than Alternate_Maximization to the high noise data.</p></dd>
+<dd><p>a string, specify the algorithm to be used for fitting model. Now it supports two algorithms: variational EM (VEM) and alternate maximization (AM) algorithm, default as VEM. Empirically, we observed that VEM is more robust than AM to the high noise data.</p></dd>
 
 </dl></div>
     <div id="details">

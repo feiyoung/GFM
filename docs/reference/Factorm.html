@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">GFM</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
       </span>
     </div>
 
@@ -35,10 +35,13 @@
       <a href="../articles/GFM.Brain.html">GFM: A Simple Transcriptomics Data</a>
     </li>
     <li>
-      <a href="../articles/GFM.Simu.html">GFM: installation and simulated example</a>
+      <a href="../articles/GFM.Simu.html">Simulated examples: alternate maximization and information criterion</a>
     </li>
     <li>
-      <a href="../articles/RGFM.html">GFM</a>
+      <a href="../articles/GFM.SimuEM.html">Simulated examples: variational EM and singular value ratio</a>
+    </li>
+    <li>
+      <a href="../articles/RGFM.html">Installation</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
@@ -124,7 +127,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in">  <span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="gendata.html">gendata</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">300</span>, p <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
 <span class="r-in">  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">Factorm</span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">X</span><span class="op">)</span></span>
 <span class="r-in">  <span class="fu"><a href="measurefun.html">measurefun</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">hH</span>, <span class="va">dat</span><span class="op">$</span><span class="va">H0</span><span class="op">)</span> <span class="co"># the smallest canonical correlation</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.969952</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ginv(t(H) %*% H):</span> could not find function "ginv"</span>
 </code></pre></div>
     </div>
   </div>

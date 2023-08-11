@@ -5,8 +5,9 @@
   Generate simulated data from high dimensional genelized nonlinear factor model.
 }
 \usage{
-  gendatafunction (seed = 1, n = 300, p = 50,
-              type =  c('homonorm', 'heternorm', 'pois', 'bino', 'norm_pois', 'pois_bino', 'npb'),
+  gendata(seed = 1, n = 300, p = 50,
+              type =  c('homonorm', 'heternorm',
+              'pois', 'bino', 'norm_pois', 'pois_bino', 'npb'),
                      q = 6, rho = 1, n_bin=1)
 
 }

@@ -3,10 +3,10 @@
 
 #' @keywords internal
 #' @noRd
-#' 
+#'
 NULL
 
-VB_GFMcpp <- function(XList, typeID, A, Mu_y_int, S_y_int, invLambda_int, B_int, mu_int, Mu_h_int, S_h_int, Sigma_h_int, epsELBO, maxIter, verbose) {
-    .Call(`_GFM_VB_GFMcpp`, XList, typeID, A, Mu_y_int, S_y_int, invLambda_int, B_int, mu_int, Mu_h_int, S_h_int, Sigma_h_int, epsELBO, maxIter, verbose)
+VB_GFMcpp <- function(XList, typeID, A, Mu_y_int, S_y_int, invLambda_int, B_int, mu_int, H_int, epsELBO, maxIter, verbose) {
+    .Call(`_GFM_VB_GFMcpp`, XList, typeID, A, Mu_y_int, S_y_int, invLambda_int, B_int, mu_int, H_int, epsELBO, maxIter, verbose)
 }
 

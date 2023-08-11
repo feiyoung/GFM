@@ -1,0 +1,368 @@
+---
+title: "OverGFM: simulated examples"
+author: "Jinyu Nie, Zhilong Qin, Wei Liu"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{OverGFM: simulated examples}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+In this tutorial, we show the usage of the overdispersed generalized factor model (OverGFM) and compare it with the competitors.
+
+
+# Load GFM package
+
+The package can be loaded with the following command:
+
+```{r  eval = FALSE}
+library("GFM")
+```
+# Load rrpack and PCAmixdata packages for other methods
+
+The rrpack package can be loaded with the following command:
+```{r  eval = FALSE}
+library("rrpack")
+```
+
+The PCAmixdata package can be loaded with the following command:
+```{r  eval = FALSE}
+library("PCAmixdata")
+```
+
+# Introduction to the data generation mechanisms
+
+We define the function with details for the data generation mechanism.
+```{r  eval = FALSE}
+gendata_s2 <- function (seed = 1, n = 500, p = 500,
+                        type =  c('homonorm', 'heternorm', 'pois', 'bino', 'norm_pois',
+                                  'pois_bino', 'npb'),
+                        q = 6, rho = c(0.05, 0.2, 0.1), n_bin=1, sigma_eps=0.1){
+  library(MASS)
+  Diag <- GFM:::Diag
+  cor.mat <- GFM:::cor.mat
+  type <- match.arg(type)
+  rho_gauss <- rho[1]
+  rho_pois <- rho[2]
+  rho_binary <- rho[3]
+  set.seed(seed)
+  Z <- matrix(rnorm(p * q), p, q)
+  if (type == "homonorm") {
+    g1 <- 1:p
+    Z <- rho_gauss * Z
+  }else if (type == "heternorm"){
+    g1 <- 1:p
+    Z <- rho_gauss * Z
+  }else if(type == "pois"){
+    g1 <- 1:p
+    Z <- rho_pois * Z
+  }else if(type == 'bino'){
+    g1 <- 1:p
+    Z <- rho_binary * Z
+  }else if (type == "norm_pois") {
+    g1 <- 1:floor(p/2)
+    g2 <- (floor(p/2) + 1):p
+    Z[g1, ] <- rho_gauss * Z[g1, ]
+    Z[g2, ] <- rho_pois * Z[g2, ]
+  }else if (type == "pois_bino") {
+    g1 <- 1:floor(p/2)
+    g2 <- (floor(p/2) + 1):p
+    
+    Z[g1, ] <- rho_pois * Z[g1, ]
+    Z[g2, ] <- rho_binary * Z[g2, ]
+  }else if(type == 'npb'){
+    g1 <- 1:floor(p/3)
+    g2 <- (floor(p/3) + 1):floor(p*2/3)
+    g3 <- (floor(2*p/3) + 1):p
+    Z[g1, ] <- rho_gauss * Z[g1, ]
+    Z[g2, ] <- rho_pois * Z[g2, ]
+    Z[g3, ] <- rho_binary * Z[g3, ]
+  }
+  svdZ <- svd(Z) 
+  B1 <- svdZ$u %*% Diag(svdZ$d[1:q])
+  B0 <- B1 %*% Diag(sign(B1[1, ]))
+  mu0 <- 0.4 * rnorm(p)
+  Bm0 <- cbind(mu0, B0)
+  
+  set.seed(seed)
+  H <- mvrnorm(n, mu = rep(0, q), cor.mat(q, 0.5))
+  svdH <- svd(cov(H))
+  H0 <- scale(H, scale = F) %*% svdH$u %*% Diag(1/sqrt(svdH$d)) %*%
+    svdH$v 
+  if (type == "homonorm") {
+    X <- H0 %*% t(B0) + matrix(mu0, n, p, byrow = T) + mvrnorm(n,
+                                                               rep(0, p), sigma_eps*diag(p))
+    group <- rep(1, p)
+    XList <- list(X)
+    types <- c("gaussian")
+    
+  }else if (type == "heternorm") {
+    sigmas = sigma_eps*(0.1 + 4 * runif(p))
+    X <- H0 %*% t(B0) + matrix(mu0, n, p, byrow = T) + mvrnorm(n,
+                                                               rep(0, p), diag(sigmas))
+    group <- rep(1, p)
+    
+    XList <- list(X)
+    types <- c("gaussian")
+    
+  }else if (type == "pois") {
+    
+    
+    Eta <- H0 %*% t(B0) + matrix(mu0, n, p, byrow = T) + mvrnorm(n,rep(0, p),
+                                                                 sigma_eps*diag(p))
+    mu <- exp(Eta)
+    X <- matrix(rpois(n * p, lambda = mu), n, p)
+    group <- rep(1, p)
+    XList <- list(X[,g1])
+    types <- c("poisson")
+  }else if(type == 'bino'){
+    
+    Eta <- cbind(1, H0) %*% t(Bm0[g1, ]) + mvrnorm(n,rep(0, p), sigma_eps*diag(p))
+    mu <- 1/(1 + exp(-Eta))
+    X <- matrix(rbinom(prod(dim(mu)), n_bin, mu), n, p)
+    group <- rep(1, p)
+    
+    XList <- list(X[,g1])
+    types <- c("binomial")
+  }else if (type == "norm_pois") {
+    
+    Eps <- mvrnorm(n,rep(0, p), sigma_eps*diag(p))
+    mu1 <- cbind(1, H0) %*% t(Bm0[g1, ]) + Eps[, g1]
+    mu2 <- exp(cbind(1, H0) %*% t(Bm0[g2, ])+ Eps[, g2]) 
+    X <- cbind(matrix(rnorm(prod(dim(mu1)), mu1, 1), n, floor(p/2)),
+               matrix(rpois(prod(dim(mu2)), mu2), n, ncol(mu2)))
+    group <- c(rep(1, length(g1)), rep(2, length(g2)))
+    
+    XList <- list(X[,g1], X[,g2])
+    types <- c("gaussian", "poisson")
+    
+  }else if (type == "pois_bino") {
+    
+    Eps <- mvrnorm(n,rep(0, p), sigma_eps*diag(p))
+    mu1 <- exp(cbind(1, H0) %*% t(Bm0[g1, ])+ Eps[,g1])
+    mu2 <- 1/(1 + exp(-cbind(1, H0) %*% t(Bm0[g2, ])- Eps[,g2]))
+    X <- cbind(matrix(rpois(prod(dim(mu1)), mu1), n, ncol(mu1)),
+               matrix(rbinom(prod(dim(mu2)), n_bin, mu2), n, ncol(mu2)))
+    group <- c(rep(1, length(g1)), rep(2, length(g2)))
+    XList <- list(X[,g1], X[,g2])
+    types <- c("poisson", 'binomial')
+  }else if(type == 'npb'){
+    
+    Eps <- mvrnorm(n,rep(0, p), sigma_eps*diag(p))
+    mu11 <- cbind(1, H0) %*% t(Bm0[g1, ]) + Eps[,g1]
+    mu1 <- exp(cbind(1, H0) %*% t(Bm0[g2, ]) +  Eps[,g2])
+    mu2 <- 1/(1 + exp(-cbind(1, H0) %*% t(Bm0[g3, ])-  Eps[,g3]))
+    X <- cbind(matrix(rnorm(prod(dim(mu11)),mu11, 1), n, ncol(mu11)),
+               matrix(rpois(prod(dim(mu1)), mu1), n, ncol(mu1)),
+               matrix(rbinom(prod(dim(mu2)), n_bin, mu2), n, ncol(mu2)))
+    group <- c(rep(1, length(g1)), rep(2, length(g2)), rep(3, length(g3)))
+    XList <- list(X[,g1], X[,g2], X[,g3])
+    types <- c("gaussian", "poisson", 'binomial')
+  }
+  
+  return(list(X=X, XList = XList,  types= types, B0 = B0, H0 = H0, mu0 = mu0))
+}
+```
+
+# Brief description of other methods
+
+GFM method capable of handling mixed-type data is implemented in the R package $\bf GFM$.
+
+MRRR method which is implemented in the R package $\bf rrpack$ also handles mixed-type data through reduced-rank regression model, and we redefine the function of this method and modify its output results for comparison conveniently.
+
+```{r   eval = FALSE}
+Diag <- GFM:::Diag
+## Compare with MRRR
+mrrr_run <- function(Y, rank0,family=list(poisson()),
+                     familygroup,  epsilon = 1e-4, sv.tol = 1e-2,lambdaSVD=0.1, maxIter = 2000, trace=TRUE){
+  # epsilon = 1e-4; sv.tol = 1e-2; maxIter = 30; trace=TRUE
+  
+  require(rrpack)
+  
+  n <- nrow(Y); p <- ncol(Y)
+  X <- cbind(1, diag(n))
+  
+  
+  svdX0d1 <- svd(X)$d[1]
+  init1 = list(kappaC0 = svdX0d1 * 5)
+  offset = NULL
+  control = list(epsilon = epsilon, sv.tol = sv.tol, maxit = maxIter,
+                 trace = trace, gammaC0 = 1.1, plot.cv = TRUE,
+                 conv.obj = TRUE)
+  res_mrrr <- mrrr(Y=Y, X=X[,-1], family = family, familygroup = familygroup,
+                   penstr = list(penaltySVD = "rankCon", lambdaSVD = lambdaSVD),
+                   control = control, init = init1, maxrank = rank0)
+  
+  hmu <- res_mrrr$coef[1,]
+  hTheta <- res_mrrr$coef[-1,]
+  #print(dim(hTheta))
+  # Matrix::rankMatrix(hTheta)
+  svd_Theta <- svd(hTheta, nu=rank0,nv =rank0)
+  hH <- svd_Theta$u
+  hB <- svd_Theta$v %*% Diag(svd_Theta$d[1:rank0]) 
+  #print(dim(svd_Theta$v))
+  #print(dim(Diag(svd_Theta$d)))
+  return(list(hH=hH, hB=hB, hmu= hmu))
+}
+```
+PCAmix method which uses Principal component analysis for data with mix of qualitative and quantitative variables is implemented in the R package $\bf PCAmixdata$.
+
+LFM method which handles linear factor model is implemented in the R package $\bf GFM$, and we define the function of this method based on R package $\bf GFM$.
+
+```{r   eval = FALSE}
+factorm <- function(X, q=NULL){
+  
+  signrevise <- GFM:::signrevise
+  if ((!is.null(q)) && (q < 1)) 
+    stop("q must be NULL or other positive integer!")
+  if (!is.matrix(X)) 
+    stop("X must be a matrix.")
+  mu <- colMeans(X)
+  X <- scale(X, scale = FALSE)
+  n <- nrow(X)
+  p <- ncol(X)
+  if (p > n) {
+    svdX <- eigen(X %*% t(X))
+    evalues <- svdX$values
+    eigrt <- evalues[1:(21 - 1)]/evalues[2:21]
+    if (is.null(q)) {
+      q <- which.max(eigrt)
+    }
+    hatF <- as.matrix(svdX$vector[, 1:q] * sqrt(n))
+    B2 <- n^(-1) * t(X) %*% hatF
+    sB <- sign(B2[1, ])
+    hB <- B2 * matrix(sB, nrow = p, ncol = q, byrow = TRUE)
+    hH <- sapply(1:q, function(k) hatF[, k] * sign(B2[1, 
+    ])[k])
+  }
+  else {
+    svdX <- eigen(t(X) %*% X)
+    evalues <- svdX$values
+    eigrt <- evalues[1:(21 - 1)]/evalues[2:21]
+    if (is.null(q)) {
+      q <- which.max(eigrt)
+    }
+    hB1 <- as.matrix(svdX$vector[, 1:q])
+    hH1 <- n^(-1) * X %*% hB1
+    svdH <- svd(hH1)
+    hH2 <- signrevise(svdH$u * sqrt(n), hH1)
+    if (q == 1) {
+      hB1 <- hB1 %*% svdH$d[1:q] * sqrt(n)
+    }
+    else {
+      hB1 <- hB1 %*% diag(svdH$d[1:q]) * sqrt(n)
+    }
+    sB <- sign(hB1[1, ])
+    hB <- hB1 * matrix(sB, nrow = p, ncol = q, byrow = TRUE)
+    hH <- sapply(1:q, function(j) hH2[, j] * sB[j])
+  }
+  sigma2vec <- colMeans((X - hH %*% t(hB))^2)
+  res <- list()
+  res$hH <- hH
+  res$hB <- hB
+  res$mu <- mu
+  res$q <- q
+  res$sigma2vec <- sigma2vec
+  res$propvar <- sum(evalues[1:q])/sum(evalues)
+  res$egvalues <- evalues
+  attr(res, "class") <- "fac"
+  return(res)
+}
+```
+
+# OverGFM can handle overdispersed mixed-type data
+
+First, we generate a simulated data for three mixed-type variables based on the aforementioned data generate function. 
+We fix $(n,p) = (500,500)$ ,$\sigma^2 = 0.7$ and the signal strength $(\rho_1, \rho_2, \rho_3)=(0.05,0.2,0.1)$. Additionally, we set the number of factor $q$ is 6. 
+The details for the data setting is following :
+```{r  eval = FALSE}
+  q <- 6
+  datList <- gendata_s2(seed = 1, type= 'npb', n=500, p=500, q=q, 
+                        rho= c(0.05, 0.2, 0.1) ,sigma_eps = 0.7)
+```
+
+Second, we define the trace statistic to assess the performance.
+```{r  eval = FALSE}
+trace_statistic_fun <- function(H, H0){
+  
+  tr_fun <- function(x) sum(diag(x))
+  mat1 <- t(H0) %*% H %*% ginv(t(H) %*% H) %*% t(H) %*% H0
+  
+  tr_fun(mat1) / tr_fun(t(H0) %*% H0)
+  
+}
+```
+
+Then we use OverGFM to fit model.
+```{r  eval = FALSE}
+  gfm_over <- overdispersedGFM(datList$XList, types=datList$types, q=q)
+  OverGFM_H <- trace_statistic_fun(gfm_over$hH, datList$H0)
+  OverGFM_G <- trace_statistic_fun(cbind(gfm_over$hmu,gfm_over$hB),
+                                        cbind(datList$mu0,datList$B0))
+```
+
+# Other methods poorly handle overdispersed mixed-type data
+
+We use other methods to fit model.
+```{r  eval = FALSE}
+  lfm <- factorm(datList$X, q=q) 
+  gfm_am <- gfm(datList$XList, types=datList$types, q=q, algorithm = "AM",
+                maxIter = 15)
+  familygroup <- lapply(1:length(datList$types), function(j) rep(j,                                                         ncol(datList$XList[[j]])))
+  res_mrrr <- mrrr_run(datList$X, rank0=q, family=list(gaussian(), poisson(),
+                                                       binomial()),familygroup =
+                         unlist(familygroup), maxIter=2000)
+  dat_bino <- as.data.frame(datList$XList[[3]])
+  for(jj in 1:ncol(dat_bino)) dat_bino[,jj] <- factor(dat_bino[,jj])
+  dat_norm <- as.data.frame(cbind(datList$XList[[1]],datList$XList[[2]]))
+  res_pcamix <- PCAmix(X.quanti = dat_norm, X.quali = dat_bino,rename.level=TRUE, ndim=q,
+                       graph=F)
+  reslits <- lapply(res_pcamix$coef, function(x) x[c(seq(2, ncol(dat_norm)+1, by=1),
+                                                     seq(ncol(dat_norm)+3,
+                                                         nrow(res_pcamix$coef[[1]]), by=2)),])
+  loadings <- Reduce(cbind, reslits)
+  GFM_H <- trace_statistic_fun(gfm_am$hH, datList$H0)
+  GFM_G <- trace_statistic_fun(cbind(gfm_am$hmu,gfm_am$hB),
+                                    cbind(datList$mu0,datList$B0))
+  MRRR_H <- trace_statistic_fun(res_mrrr$hH, datList$H0)
+  MRRR_G <- trace_statistic_fun(cbind(res_mrrr$hmu,res_mrrr$hB),
+                                     cbind(datList$mu0,datList$B0))
+  PCAmix_H <- trace_statistic_fun(res_pcamix$ind$coord, datList$H0)
+  PCAmix_G <- trace_statistic_fun(loadings, cbind(datList$mu0,datList$B0))
+  LFM_H <- trace_statistic_fun(lfm$hH, datList$H0)
+  LFM_G <- trace_statistic_fun(cbind(lfm$mu,lfm$hB), cbind(datList$mu0,datList$B0))
+```
+
+# Visualization 
+
+We visualize the comparison of the trace statistic of $\bf H$ and $\bf \Upsilon$ for each methods
+```{r  eval = FALSE}
+library(ggplot2)
+value <- c(OverGFM_H,OverGFM_G,GFM_H,GFM_G,MRRR_H,MRRR_G,PCAmix_H,PCAmix_G,LFM_H,LFM_G)
+df <- data.frame(Value = value,
+                 Methods = factor(rep(c("OverGFM","GFM","MRRR","PCAmix","LFM"), each = 2),
+                                  levels = c("OverGFM","GFM","MRRR","PCAmix","LFM")),
+                 Trace = factor(rep(c("Tr_H","Tr_Gamma"), times = 5),levels = c("Tr_H","Tr_Gamma")))
+ggplot(data = df,aes(x = Methods, y = Value, colour = Methods, fill=Methods)) +
+  geom_bar(stat="identity") + 
+  facet_grid(Trace ~ .,drop = TRUE, scales = "free_x") + theme_bw() +
+  theme(axis.text.x = element_text(size = 10,angle = 25, hjust = 1, vjust = 1), 
+        axis.text.y = element_text(size = 10, hjust = 1, vjust = 1),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        legend.title=element_blank())+
+  labs( x="Method", y = "Trace statistic ")
+
+```
+
+# Session information
+
+```{r  eval = FALSE}
+sessionInfo()
+```
+
+
+
+

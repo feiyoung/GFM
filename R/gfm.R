@@ -2,12 +2,14 @@
 
 # library(pkgdown)
 # build_site()
+# build_home()
 # build_article('GFM.Simu')
-# build_article("GFM.Brain")
+# build_article("OverGFM_exam")
+# build_reference()
 gfm <- function(XList, types, q=10, offset=FALSE, dc_eps=1e-4, maxIter=30,
-                verbose = TRUE, algorithm=c("VEM", "Alternate_Maximization")){
+                verbose = TRUE, algorithm=c("VEM", "AM")){
 
-  #  algorithm=c("VEM"); offset=FALSE; dc_eps=1e-4; maxIter=30; verbose = TRUE
+  #   dc_eps=1e-4; maxIter=30; verbose = TRUE
 
 
   if((!is.null(q)) && (q<1) ) stop("q must be NULL or other positive integer!")
@@ -24,13 +26,21 @@ gfm <- function(XList, types, q=10, offset=FALSE, dc_eps=1e-4, maxIter=30,
     stop("The component of string vector types must be contained in ('gaussian', 'poisson', 'binomial')!")
   }
 
+  ### two-step estimation
+  ### algorithm 1: use VEM to obtain initial values, then use one-step update to improve the estimate.
+  ### algorithm 2: use alternate maximization to obtain initial values, then use one-step update to improve the estimate.
   if(algorithm== "VEM"){
+    if(verbose){
+      message('Starting the two-step method with varitional EM in the first step...\n')## use VEM to obtain initial values
+    }
 
-    message('Starting the varitional EM algorithm...\n')
     tic <- proc.time()
-    reslist <- gfm_vb.fit(XList, types, q=q, offset=offset, epsELBO=dc_eps, maxIter=maxIter, verbose=verbose)
+    reslist <- vem.fit(XList, types, q=q, offset=offset, epsELBO=dc_eps, maxIter=maxIter, verbose=verbose)
     toc <- proc.time()
-    message('Finish the varitional EM algorithm...\n')
+    if(verbose){
+      message('Finish the two-step method\n')
+    }
+
     gfm2 <- list()
     gfm2$hH <- reslist$H
     gfm2$hB <- reslist$B
@@ -47,12 +57,12 @@ gfm <- function(XList, types, q=10, offset=FALSE, dc_eps=1e-4, maxIter=30,
       }
       rm(XList)
       gfm2final <- gfm_eval_intercept_osfinal(X, gfm2$hH, gfm2$hB,gfm2$hmu, group, types)
-      if(any(is.nan(gfm2final$hH)) || any(is.nan(gfm2final$hB))) error("there is NaNs produced!")
+      if(any(is.nan(gfm2final$hH)) || any(is.nan(gfm2final$hB))) stop("there is NaNs produced!")
       gfm2final$history <- gfm2$history
       gfm2 <- gfm2final
     }, silent = TRUE)
 
-  }else if(algorithm== 'Alternate_Maximization'){
+  }else if(algorithm== 'AM'){
 
     X <- NULL
     group <- NULL
@@ -62,17 +72,23 @@ gfm <- function(XList, types, q=10, offset=FALSE, dc_eps=1e-4, maxIter=30,
     }
     rm(XList)
     omega <- 1/p
-    message('Starting the alternate maximization algorithm...\n')
+    if(verbose){
+      message('Starting the two-step method with alternate maximization in the first step...\n')
+    }
+
     dropout <- 0
     if(any(typeID==2) && length(typeID)>1) dropout <- which(typeID==2)
     gfm2 <- gfm_eval_intercept_init(X, group, types, q,
                                     dropout, dc_eps, maxIter,
                                     verbose)
 
-    message('Finish the alternate maximization algorithm...\n')
+    if(verbose){
+      message('Finish the two-step method\n')
+    }
+
     try({
       gfm2final <- gfm_eval_intercept_osfinal(X, gfm2$hH, gfm2$hB,gfm2$hmu, group, types)
-      if(any(is.nan(gfm2final$hH)) || any(is.nan(gfm2final$hB))) error("there is NaNs produced!")
+      if(any(is.nan(gfm2final$hH)) || any(is.nan(gfm2final$hB))) stop("there is NaNs produced!")
       gfm2final$history <- gfm2$history
       gfm2 <- gfm2final
     }, silent = TRUE)
@@ -87,7 +103,7 @@ gfm <- function(XList, types, q=10, offset=FALSE, dc_eps=1e-4, maxIter=30,
   return(gfm2)
 }
 
-chooseFacNumber <- function(XList, types, q_set = 2: 10, select_method = c("ratio_test", "IC"),offset=FALSE, dc_eps=1e-4, maxIter=30,
+chooseFacNumber <- function(XList, types, q_set = 2: 10, select_method = c("SVR", "IC"),offset=FALSE, dc_eps=1e-4, maxIter=30,
                             verbose = TRUE, parallelList=NULL){
 
   select_method <- match.arg(select_method)
@@ -159,7 +175,7 @@ chooseFacNumber <- function(XList, types, q_set = 2: 10, select_method = c("rati
     q <- q_set[which.min(resq)]
 
     message('IC criterion estimates the factor number q  as ', q, '. \n')
-  }else if(select_method == 'ratio_test'){
+  }else if(select_method == 'SVR'){
      q_max <- max(q_set)
      gfm2 <- gfm(XList, types, q=q_max, algorithm = 'VEM', offset=offset, dc_eps=dc_eps, maxIter=maxIter,verbose = verbose)
 
@@ -169,7 +185,7 @@ chooseFacNumber <- function(XList, types, q_set = 2: 10, select_method = c("rati
      q_max <- length(svalues_use)
      q <- which.max(svalues[-q_max] / svalues[-1])
 
-     message('Eigevalue ratio test estimates the factor number q  as ', q, '. \n')
+     message('The singular value ratio (SVR) method estimates the factor number q  as ', q, '. \n')
   }
 
 

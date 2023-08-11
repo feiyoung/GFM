@@ -1,10 +1,10 @@
 ---
-title: 'GFM: installation and simulated example'
+title: 'GFM: alternate maximization and information criterion'
 author: "Wei Liu"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{GFM: installation and simulated example}
+  %\VignetteIndexEntry{GFM: alternate maximization and information criterion}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,37 +16,26 @@ knitr::opts_chunk$set(
 )
 ```
 
+In this tutorial, we show that the alternate maximization (AM)  is used in the first step of the two-step estimation method and the information criterion (IC) method is adopted to choose the number of factors.
 
 
 
-## Install the GFM
-This vignette provides an introduction to the R package `GFM`, where the function `gfm` implements the model `GFM`, Generalized Factor Model for ultra-high dimensional variables with mixed types. The estimated factors and loading matrices can be applied to a variaty of downstream analyses, such as cell type clustering in single cell RNA sequencing data analysis and important SNPs identification in GWAS data analysis, among others.
-
-The package can be installed with the command:
-
-`library(remotes)`
-
-`remotes::install_github("feiyoung/GFM")`
-
-or
-
-`install.packages("GFM")`
+## Fit GFM model using simulated data
 
 The package can be loaded with the command:
-```{r  eval=TRUE}
+```{r  eval=FALSE}
 library("GFM")
 set.seed(1) # set a random seed for reproducibility.
 ```
 
-## Fit GFM model using simulated data
 ### GFM can handle data with  homogeneous  normal variables
 First, we generate the data with  homogeneous  normal variables.
-```{r  eval=TRUE}
+```{r  eval=FALSE}
 ## Homogeneous  normal variables
   dat <- gendata(q = 2, n=100, p=100, rho=3)
 ```
 Then, we set the algorithm parameters and fit model
-```{r eval=TRUE}
+```{r eval=FALSE}
 # Obtain the observed data
   XList <- dat$XList # this is the data in the form of matrix list.
   str(XList)
@@ -55,25 +44,25 @@ Then, we set the algorithm parameters and fit model
   types <- 'gaussian' 
 ```
 Third, we fit the GFM model with user-specified number of factors.
-```{r  eval=TRUE}
+```{r  eval=FALSE}
 # specify q=2
-  gfm1 <- gfm(XList, types,  q=2, verbose = FALSE)
+  gfm1 <- gfm(XList, types, algorithm="AM", q=2, verbose = FALSE)
   
   # measure the performance of GFM estimators in terms of canonical correlations
   measurefun(gfm1$hH, dat$H0, type='ccor')
   measurefun(gfm1$hB, dat$B0, type='ccor')
 ```
 The number of factors can also be determined by data-driven manners.
-```{r  eval=TRUE}
+```{r  eval=FALSE}
 # select q automatically
-  hq <- chooseFacNumber(XList, types, q_set = 1:6, verbose = FALSE)
+  hq <- chooseFacNumber(XList, types, select_method='IC', q_set = 1:6, verbose = FALSE, parallelList=list(parallel=TRUE))
   hq
 ```
 
 
 ### GFM outperforms LFM in analyzing data with  heterogeous normal variables
 First, we generate the data with  heterogeous  normal variables and set the parameters of algorithm.
-```{r  eval=TRUE}
+```{r  eval=FALSE}
   dat <- gendata(seed=1, n=100, p=100, type='heternorm', q=2, rho=1)
  # Obtain the observed data
   XList <- dat$XList # this is the data in the form of matrix list.
@@ -84,9 +73,9 @@ First, we generate the data with  heterogeous  normal variables and set the para
 ```
 
 Third, we fit the GFM model with user-specified number of factors and compare the results with that of linear factor models.
-```{r  eval=TRUE}
+```{r  eval=FALSE}
 # specify q=2
-  gfm1 <- gfm(XList, types, q=2, verbose = FALSE)
+  gfm1 <- gfm(XList, types,  algorithm="AM", q=2, verbose = FALSE)
   
   # measure the performance of GFM estimators in terms of canonical correlations
   corH_gfm <- measurefun(gfm1$hH, dat$H0, type='ccor')
@@ -104,15 +93,14 @@ Third, we fit the GFM model with user-specified number of factors and compare th
 ```
 
 The number of factors can also be determined by data-driven manners.
-```{r  eval=TRUE}
+```{r  eval=FALSE}
 # select q automatically
-   hq <- chooseFacNumber(XList, types, q_set = 1:6, verbose = FALSE)
-  hq
+  hq <- chooseFacNumber(XList, types, select_method='IC', q_set = 1:6, verbose = FALSE, parallelList=list(parallel=TRUE))
 ```
 
 ### GFM outperforms LFM in analyzing data with  Count(Poisson) variables
 First, we generate the data with  Count(Poisson) variables and set the parameters of algorithm.
-```{r  eval=TRUE}
+```{r  eval=FALSE}
   q <- 3; p <- 200
   dat <- gendata(seed=1, n=200, p=p, type='pois', q=q, rho=4)
   # Obtain the observed data
@@ -124,17 +112,13 @@ First, we generate the data with  Count(Poisson) variables and set the parameter
 ```
 
 Second, we we fit the GFM models given the true number of factors. 
-```{r  eval=TRUE}
+```{r  eval=FALSE}
   system.time(
-   gfm1 <- gfm(XList, types, q=3, verbose = FALSE)
+   gfm1 <- gfm(XList, types,  algorithm="AM", q=3, verbose = FALSE)
   )
 ```
-Additionally, we demonstrate the two methods, eigenvalue ratio test (ratio_test) and information criterion (IC), to choose the number of factors, which suggests both methods can accurately chooose the number of factors, while `ratio_test` is much more efficient than the `IC` method that is even though implemented in  parallel. Thus, we strongly recommand `ratio_test`, especially for high-dimensional large-scale data.
-```{r  eval=TRUE}
-system.time(
-  hq <- chooseFacNumber(XList, types, select_method = "ratio_test", q_set = 1:6, verbose=FALSE)
-)
- 
+
+```{r  eval=FALSE}
 system.time(
   hq <- chooseFacNumber(XList, types, q_set=1:6, select_method = "IC", parallelList=list(parallel=TRUE))
 )
@@ -143,7 +127,7 @@ system.time(
 
 
 Third, we compare the results with that of linear factor models.
-```{r  eval=TRUE}
+```{r  eval=FALSE}
 
   # measure the performance of GFM estimators in terms of canonical correlations
   corH_gfm <- measurefun(gfm1$hH, dat$H0, type='ccor')
@@ -164,7 +148,7 @@ Third, we compare the results with that of linear factor models.
 ### GFM outperforms LFM in analyzing data with  the mixed-types of count and categorical variables
 
 First, we generate the data with  Count(Poisson) variables and set the parameters of algorithm. Then fit the GFM model with user-specified number of factors.
-```{r  eval=TRUE}
+```{r  eval=FALSE}
   dat <- gendata(seed=1, n=200, p=200, type='pois_bino', q=2, rho=2)
   # Obtain the observed data
   XList <- dat$XList # this is the data in the form of matrix list.
@@ -175,23 +159,23 @@ First, we generate the data with  Count(Poisson) variables and set the parameter
   table(dat$X[,1])
   table(dat$X[, 200])
   # user-specified q=2
-  gfm2 <- gfm(XList, types,  q=2, verbose = FALSE)
+  gfm2 <- gfm(XList, types,  algorithm="AM", q=2, verbose = FALSE)
   measurefun(gfm2$hH, dat$H0, type='ccor')
   measurefun(gfm2$hB, dat$B0, type='ccor')
 ```
 
 
 Third, we compare the results with that of linear factor models.
-```{r  eval=TRUE}
+```{r  eval=FALSE}
   #  select q automatically
-  hq <- chooseFacNumber(XList, types)
+  hq <- chooseFacNumber(XList, types, select_method='IC', q_set = 1:4, verbose = FALSE, parallelList=list(parallel=TRUE))
   # measure the performance of GFM estimators in terms of canonical correlations
   corH_gfm <- measurefun(gfm2$hH, dat$H0, type='ccor')
   corB_gfm <- measurefun(gfm2$hB, dat$B0, type='ccor')
   
 ```
 Compare with linear factor models
-```{r  eval=TRUE}
+```{r  eval=FALSE}
   lfm1 <- Factorm(dat$X, q=3)
   corH_lfm <- measurefun(lfm1$hH, dat$H0, type='ccor')
   corB_lfm <- measurefun(lfm1$hB, dat$B0, type='ccor')
@@ -202,6 +186,7 @@ Compare with linear factor models
                     Quantity= factor(c(rep('factors',2), rep("loadings", 2))))
   ggplot(data=df1, aes(x=Quantity, y=CCor, fill=Method)) + geom_bar(position = "dodge", stat="identity",width = 0.5)
 ```
+
 ## Session information
 ```{r}
 sessionInfo()

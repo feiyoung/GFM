@@ -14,7 +14,7 @@ get_initials <- function(X, q){
 
 }
 
-gfm_vb.fit <- function(XList, types, q, offset=FALSE, epsELBO=1e-5, maxIter=30, verbose=TRUE){
+vem.fit <- function(XList, types, q, offset=FALSE, epsELBO=1e-5, maxIter=30, verbose=TRUE){
   # epsELBO=1e-5; maxIter=30; verbose=TRUE
   #typeID <- c(1, 2, 3);
   n <- nrow(XList[[1]]);
@@ -40,7 +40,6 @@ gfm_vb.fit <- function(XList, types, q, offset=FALSE, epsELBO=1e-5, maxIter=30, 
 
     rm(AList)
   }
-  library(Matrix)
   A <- as(A, "sparseMatrix")
   Mu_y_int <- NULL
   for(i in seq_along(typeID)){
@@ -58,16 +57,80 @@ gfm_vb.fit <- function(XList, types, q, offset=FALSE, epsELBO=1e-5, maxIter=30, 
   # B_int = matrix(rnorm(p*q), p, q)*0.1;
   # Mu_h_int <-  matrix(rnorm(n*q), n, q)#matrix(0, n, q)
   mu_int <- colMeans(Mu_y_int)
-  #S_h_int  <- diag(rep(1, q))
-  S_h_int <- var(Mu_h_int)
-  Sigma_h_int <- diag(rep(1, q))
   #invLambda_int = rep(1, p);
   invLambda_int <- 1/ Fac$sigma2vec
   reslist <- VB_GFMcpp(XList, typeID, A,  Mu_y_int, S_y_int, invLambda_int,
-                       B_int, mu_int, Mu_h_int, S_h_int, Sigma_h_int, epsELBO, maxIter,
+                       B_int, mu_int, Mu_h_int, epsELBO, maxIter,
                        verbose)
 
 
 
   return(reslist)
+}
+
+
+overdispersedGFM <- function(XList, types, q, offset=FALSE, epsELBO=1e-5, maxIter=30, verbose=TRUE){
+
+  #   dc_eps=1e-4; maxIter=30; verbose = TRUE
+
+
+  if((!is.null(q)) && (q<1) ) stop("q must be NULL or other positive integer!")
+  n <- nrow(XList[[1]]); p <- sum(sapply(XList, ncol))
+  if(p <2) stop("ncol(X) must be at least no less than 2!")
+  if(n <2) stop("nrow(X) must be at least no less than 2!")
+
+  type_map <- 1:3;
+  names(type_map) <- c("gaussian", "poisson", "binomial")
+  typeID <- unname(type_map[types]) ## match IDs
+  if(length(setdiff(types,names(type_map)))>1){
+    stop("The component of string vector types must be contained in ('gaussian', 'poisson', 'binomial')!")
+  }
+  if(verbose){
+    message('Starting the varitional EM algorithm for overdispersed GFM model...\n')
+  }
+  tic <- proc.time()
+  reslist <- vem.fit(XList, types, q=q, offset=offset, epsELBO=epsELBO, maxIter=maxIter, verbose=verbose)
+  toc <- proc.time()
+  if(verbose){
+    message('Finish the varitional EM algorithm\n')
+  }
+
+  gfm2 <- list()
+  gfm2$hH <- reslist$H
+  gfm2$hB <- reslist$B
+  gfm2$hmu <- t(reslist$mu)
+  gfm2$obj <- reslist$ELBO
+  gfm2$history <- list(c=reslist$ELBO_seq, maxIter=maxIter, eplasedTime=toc-tic)
+
+
+  ## Add identifiable condition
+  try({
+    res_idents <- add_identifiability(gfm2$hH, gfm2$hB, gfm2$hmu)
+    gfm2$hH <- res_idents$H
+    gfm2$hB <- res_idents$B
+    gfm2$hmu <- res_idents$mu
+  }, silent = TRUE)
+
+  gfm2$q <- q
+  class(gfm2) <- 'gfm'
+  return(gfm2)
+}
+OverGFMchooseFacNumber <- function(XList, types, q_max=15,offset=FALSE, epsELBO=1e-4, maxIter=30,
+                            verbose = TRUE, threshold= 1e-2){
+
+
+    gfm2 <- overdispersedGFM(XList, types, q=q_max, offset=offset, epsELBO=epsELBO,
+                             maxIter=maxIter,verbose = verbose)
+
+
+    svalues <- svd(gfm2$hB)$d
+    svalues_use <- svalues[svalues>threshold]
+    q_max <- length(svalues_use)
+    q <- which.max(svalues[-q_max] / svalues[-1])
+    if(verbose){
+      message('SVR estimates the factor number q  as ', q, ' for the overdispersed GFM model!\n')
+    }
+
+  return(q)
+
 }

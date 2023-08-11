@@ -243,9 +243,20 @@ gfm_eval_intercept_init <- function(X, group, type, q,
 }
 
 
-measurefun <- function(hH, H, type='ccor'){
+trace_statistic_fun <- function(H, H0){
+
+  tr_fun <- function(x) sum(diag(x))
+  mat1 <- t(H0) %*% H %*% ginv(t(H) %*% H) %*% t(H) %*% H0
+
+  tr_fun(mat1) / tr_fun(t(H0) %*% H0)
+
+}
+
+
+measurefun <- function(hH, H, type=c('trace_statistic','ccor')){
+  type <- match.arg(type)
   q <- min(ncol(H), ncol(hH))
   switch(type,
          ccor=cancor(hH, H)$cor[q],
-         fnorm= norm(H-hH, 'F')^2/ prod(dim(H)))
+         trace_statistic= trace_statistic_fun(hH, H))
 }

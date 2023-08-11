@@ -3,9 +3,10 @@ useDynLib(GFM, .registration=TRUE)
 importFrom(Rcpp, evalCpp)
 
 export(gfm, chooseFacNumber, Factorm,
-       measurefun, gendata)
+       measurefun, gendata, overdispersedGFM,
+       OverGFMchooseFacNumber)
 
-importFrom(MASS, mvrnorm)
+importFrom(MASS, 'mvrnorm', 'ginv')
 importFrom("stats", "binomial", "cancor", "cov", "dpois", "gaussian",
            "glm.fit", "poisson", "rbinom", "rnorm", "rpois", "runif",
            "var")
@@ -13,3 +14,5 @@ importFrom("utils", "setTxtProgressBar", "txtProgressBar")
 # importFrom("foreach", "foreach")
 importFrom(irlba, irlba)
 import(doSNOW)
+import(parallel)
+importFrom("methods", "as")
