@@ -38,6 +38,17 @@ Or install the the packages "GFM" from 'CRAN'
 install.packages("GFM")
 ```
 
+
+## Usage
+For usage examples and guided walkthroughs, check the `vignettes` directory of the repo. 
+
+* [GFM and AM algorithm for simulated data](https://feiyoung.github.io/GFM/docs/articles/GFM.Simu.html)
+* [GFM and VEM algorithm for simulated data](https://feiyoung.github.io/GFM/docs/articles/GFM.SimuEM.html)
+* [OverGFM method for simulated data](https://feiyoung.github.io/GFM/docs/articles/OverGFM_exam.html)
+* [GFM for a toy real data](https://feiyoung.github.io/GFM/docs/articles/GFM.Brain.html)
+
+
+
 # Demonstration
 
 For an example of typical GFM usage, please see our [Package vignette](https://feiyoung.github.io/GFM/docs/index.html) for a demonstration and overview of the functions included in GFM.
