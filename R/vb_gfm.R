@@ -50,7 +50,7 @@ vem.fit <- function(XList, types, q, offset=FALSE, epsELBO=1e-5, maxIter=30, ver
     }
 
   }
-  S_y_int = matrix(1, n, p);
+  S_y_int = matrix(0, n, p);
   Fac <- get_initials(Mu_y_int, q= q)
   B_int <- Fac$hB
   Mu_h_int <- Fac$hH
@@ -99,6 +99,7 @@ overdispersedGFM <- function(XList, types, q, offset=FALSE, epsELBO=1e-5, maxIte
   gfm2$hH <- reslist$H
   gfm2$hB <- reslist$B
   gfm2$hmu <- t(reslist$mu)
+  gfm2$hLam <- 1.0/reslist$invLambda
   gfm2$obj <- reslist$ELBO
   gfm2$history <- list(c=reslist$ELBO_seq, maxIter=maxIter, eplasedTime=toc-tic)
 

@@ -13,9 +13,9 @@ GFM: Generalized factor model for ultra-high dimensional variables with mixed ty
 GFM  is a package for analyzing  the (ultra)high dimensional data with mixed-type variables, developed by the Huazhen Lin's lab. It is not only computationally efficient and scalable to the sample size increment, but also is capable of choosing the number of factors. In our JASA paper, a two-step method is proposed to estimate the factor and loading matrix, in which  the first step used the alternate maximization (AM) algorithm to obtain initial estimator. In the paper, the information criterion was provided to determine the number of factors.  Recently, we proposed an overdispersed generalized factor model (OverGFM) and designed a variational EM algorithm to implement OverGFM. A  singular value ratio based method was provided to determine the number of factors. In addition, the estimate from OverGFM can be also used as the initial estimates in the first step for GFMs in our previous JASA paper. 
 
 
-Check out our [JASA paper](https://www.tandfonline.com/doi/abs/10.1080/01621459.2021.1999818?journalCode=uasa20) for alternate maximization and information criterion, and our [Package vignette](https://feiyoung.github.io/GFM/docs/index.html)  for a more complete description of the usage of  GFM  and OverGFM. 
+Check out our [JASA paper](https://www.tandfonline.com/doi/abs/10.1080/01621459.2021.1999818?journalCode=uasa20) for alternate maximization and information criterion, [SIM paper](https://doi.org/10.1002/sim.10213) for the variational EM and singular value ratio based method, and our [Package vignette](https://feiyoung.github.io/GFM/docs/index.html)  for a more complete description of the usage of  GFM  and OverGFM. 
 
-GFM can be used to analyze experimental dataset from different areas, for instance:
+GFM and OverGFM can be used to analyze experimental dataset from different areas, for instance:
 
 * Social and behavioral sciences
 * Economy and finance
@@ -24,7 +24,10 @@ GFM can be used to analyze experimental dataset from different areas, for instan
 
 Please see our new paper for model details:
 
-[Wei Liu, Huazhen Lin, Shurong Zheng & Jin Liu (2021) . Generalized factor model for ultra-high dimensional mixed data. Journal of the American Statistics Association (Online).](https://www.tandfonline.com/doi/abs/10.1080/01621459.2021.1999818?journalCode=uasa20)
+- [Wei Liu, Huazhen Lin, Shurong Zheng & Jin Liu (2021) . Generalized factor model for ultra-high dimensional mixed data. Journal of the American Statistics Association (Online).](https://www.tandfonline.com/doi/abs/10.1080/01621459.2021.1999818?journalCode=uasa20)
+
+- [Jinyu Nie, Zhilong Qin, Wei Liu*, (2024). High-Dimensional Overdispersed Generalized Factor Model with Application to Single-Cell Sequencing Data Analysis,  Statistics in Medicine](https://doi.org/10.1002/sim.10213)
+
 
 # Installation
 

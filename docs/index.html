@@ -48,7 +48,7 @@
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -96,24 +96,27 @@
 <p><a href="https://cran.r-project.org/package=GFM" class="external-link"><img src="https://www.r-pkg.org/badges/version-ago/GFM"></a> <a href="https://cran.r-project.org/package=GFM" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/GFM?color=orange"></a> <a href="https://cran.r-project.org/package=GFM" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/GFM?color=orange"></a> <!-- badges: end --></p>
 <p>GFM: Generalized factor model for ultra-high dimensional variables with mixed types.</p>
 <p>GFM is a package for analyzing the (ultra)high dimensional data with mixed-type variables, developed by the Huazhen Lin’s lab. It is not only computationally efficient and scalable to the sample size increment, but also is capable of choosing the number of factors. In our JASA paper, a two-step method is proposed to estimate the factor and loading matrix, in which the first step used the alternate maximization (AM) algorithm to obtain initial estimator. In the paper, the information criterion was provided to determine the number of factors. Recently, we proposed an overdispersed generalized factor model (OverGFM) and designed a variational EM algorithm to implement OverGFM. A singular value ratio based method was provided to determine the number of factors. In addition, the estimate from OverGFM can be also used as the initial estimates in the first step for GFMs in our previous JASA paper.</p>
-<p>Check out our <a href="https://www.tandfonline.com/doi/abs/10.1080/01621459.2021.1999818?journalCode=uasa20" class="external-link">JASA paper</a> for alternate maximization and information criterion, and our <a href="https://feiyoung.github.io/GFM/docs/index.html" class="external-link">Package vignette</a> for a more complete description of the usage of GFM and OverGFM.</p>
-<p>GFM can be used to analyze experimental dataset from different areas, for instance:</p>
+<p>Check out our <a href="https://www.tandfonline.com/doi/abs/10.1080/01621459.2021.1999818?journalCode=uasa20" class="external-link">JASA paper</a> for alternate maximization and information criterion, <a href="https://doi.org/10.1002/sim.10213" class="external-link">SIM paper</a> for the variational EM and singular value ratio based method, and our <a href="https://feiyoung.github.io/GFM/docs/index.html" class="external-link">Package vignette</a> for a more complete description of the usage of GFM and OverGFM.</p>
+<p>GFM and OverGFM can be used to analyze experimental dataset from different areas, for instance:</p>
 <ul>
 <li>Social and behavioral sciences</li>
 <li>Economy and finance</li>
 <li>Genomics…</li>
 </ul>
 <p>Please see our new paper for model details:</p>
-<p><a href="https://www.tandfonline.com/doi/abs/10.1080/01621459.2021.1999818?journalCode=uasa20" class="external-link">Wei Liu, Huazhen Lin, Shurong Zheng &amp; Jin Liu (2021) . Generalized factor model for ultra-high dimensional mixed data. Journal of the American Statistics Association (Online).</a></p>
+<ul>
+<li><p><a href="https://www.tandfonline.com/doi/abs/10.1080/01621459.2021.1999818?journalCode=uasa20" class="external-link">Wei Liu, Huazhen Lin, Shurong Zheng &amp; Jin Liu (2021) . Generalized factor model for ultra-high dimensional mixed data. Journal of the American Statistics Association (Online).</a></p></li>
+<li><p><a href="https://doi.org/10.1002/sim.10213" class="external-link">Jinyu Nie, Zhilong Qin, Wei Liu*, (2024). High-Dimensional Overdispersed Generalized Factor Model with Application to Single-Cell Sequencing Data Analysis, Statistics in Medicine</a></p></li>
+</ul>
 </div>
 <div class="section level1">
 <h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h1>
 <p>To install the the packages ‘GFM’ from ‘Github’, firstly, install the ‘remotes’ package.</p>
-<pre class="{rmd}"><code><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"feiyoung/GFM"</span><span class="op">)</span></code></pre>
+<pre class="{rmd}"><code><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/remotes/man/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"feiyoung/GFM"</span><span class="op">)</span></span></code></pre>
 <p>Or install the the packages “GFM” from ‘CRAN’</p>
-<pre class="{rmd}"><code><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"GFM"</span><span class="op">)</span></code></pre>
+<pre class="{rmd}"><code><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"GFM"</span><span class="op">)</span></span></code></pre>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
@@ -189,7 +192,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

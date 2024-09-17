@@ -228,6 +228,7 @@ Rcpp::List VB_GFMcpp(const Rcpp::List& XList, const arma::vec& typeID, const arm
     Rcpp::Named("mu") = mu,
     Rcpp::Named("invLambda") = invLambda,
     Rcpp::Named("Mu_y") = Mu_y,
+    Rcpp::Named("S_y") = S_y,
     Rcpp::Named("ELBO") = ELBO_vec(iter-1),
     Rcpp::Named("dELBO") = ELBO_vec(iter-1)  - ELBO_vec(iter-2),
     Rcpp::Named("ELBO_seq") = ELBO_vec.subvec(0, iter-1)
