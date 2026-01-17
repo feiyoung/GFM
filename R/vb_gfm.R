@@ -73,7 +73,65 @@ overdispersedGFM <- function(XList, types, q, offset=FALSE, epsELBO=1e-5, maxIte
 
   #   dc_eps=1e-4; maxIter=30; verbose = TRUE
 
+  # ----------------------------
+  # Input validation / sanity checks
+  # ----------------------------
+  if (!is.null(q) && (!is.numeric(q) || q < 1 || length(q) != 1 || q != floor(q))) {
+    stop("`q` must be NULL or a single positive integer.")
+  }
 
+  # Check that XList is a non-empty list of matrices or data frames
+  if (!is.list(XList) || length(XList) < 1) {
+    stop("`XList` must be a non-empty list of matrices or data frames.")
+  }
+
+  # Check that each element of XList is a matrix or data frame with at least 2 rows and 1 column
+  for (i in seq_along(XList)) {
+    Xi <- XList[[i]]
+    if (!is.matrix(Xi) && !is.data.frame(Xi)) {
+      stop(sprintf("Element %d of `XList` is not a matrix or data frame.", i))
+    }
+    if (nrow(Xi) < 2) stop(sprintf("Element %d of `XList` must have at least 2 rows.", i))
+    if (ncol(Xi) < 1) stop(sprintf("Element %d of `XList` must have at least 1 column.", i))
+  }
+
+  # Check that all XList elements have the same number of rows
+  nrows <- sapply(XList, nrow)
+  if (length(unique(nrows)) != 1) {
+    stop("All matrices in `XList` must have the same number of rows.")
+  }
+
+  # Check types vector
+  allowed_types <- c("gaussian", "poisson", "binomial")
+  if (!is.character(types) || length(types) != length(XList)) {
+    stop("`types` must be a character vector with the same length as `XList`.")
+  }
+  if (!all(types %in% allowed_types)) {
+    stop(sprintf(
+      "All elements of `types` must be one of: %s",
+      paste(allowed_types, collapse = ", ")
+    ))
+  }
+
+  # Check offset
+  if (!is.logical(offset) || length(offset) != 1) {
+    stop("`offset` must be a single logical value (TRUE or FALSE).")
+  }
+
+  # Check epsELBO
+  if (!is.numeric(epsELBO) || length(epsELBO) != 1 || epsELBO <= 0) {
+    stop("`epsELBO` must be a single positive numeric value.")
+  }
+
+  # Check maxIter
+  if (!is.numeric(maxIter) || length(maxIter) != 1 || maxIter < 1 || maxIter != floor(maxIter)) {
+    stop("`maxIter` must be a single positive integer.")
+  }
+
+  # Check verbose
+  if (!is.logical(verbose) || length(verbose) != 1) {
+    stop("`verbose` must be a single logical value (TRUE or FALSE).")
+  }
   if((!is.null(q)) && (q<1) ) stop("q must be NULL or other positive integer!")
   n <- nrow(XList[[1]]); p <- sum(sapply(XList, ncol))
   if(p <2) stop("ncol(X) must be at least no less than 2!")
@@ -119,7 +177,7 @@ overdispersedGFM <- function(XList, types, q, offset=FALSE, epsELBO=1e-5, maxIte
 OverGFMchooseFacNumber <- function(XList, types, q_max=15,offset=FALSE, epsELBO=1e-4, maxIter=30,
                             verbose = TRUE, threshold= 1e-2){
 
-
+    if(q_max<2) stop("OverGFMchooseFacNumber: q_max must be greater than 2!")
     gfm2 <- overdispersedGFM(XList, types, q=q_max, offset=offset, epsELBO=epsELBO,
                              maxIter=maxIter,verbose = verbose)
 

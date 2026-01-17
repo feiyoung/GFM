@@ -11,8 +11,69 @@ gfm <- function(XList, types, q=10, offset=FALSE, dc_eps=1e-4, maxIter=30,
 
   #   dc_eps=1e-4; maxIter=30; verbose = TRUE
 
+  # ----------------------------
+  # Input validation / sanity checks
+  # ----------------------------
 
-  if((!is.null(q)) && (q<1) ) stop("q must be NULL or other positive integer!")
+  # Check q
+  if (!is.null(q) && (!is.numeric(q) || length(q) != 1 || q < 1 || q != floor(q))) {
+    stop("`q` must be NULL or a single positive integer.")
+  }
+
+  # Check XList
+  if (!is.list(XList) || length(XList) < 1) {
+    stop("`XList` must be a non-empty list of matrices or data frames.")
+  }
+
+  # Each element of XList must be matrix/data.frame with at least 2 rows and 1 column
+  for (i in seq_along(XList)) {
+    Xi <- XList[[i]]
+    if (!is.matrix(Xi) && !is.data.frame(Xi)) {
+      stop(sprintf("Element %d of `XList` is not a matrix or data frame.", i))
+    }
+    if (nrow(Xi) < 20) stop(sprintf("Element %d of `XList` must have at least 20 rows.", i))
+    if (ncol(Xi) < 1) stop(sprintf("Element %d of `XList` must have at least 1 column.", i))
+  }
+
+  # Check all XList have same number of rows
+  nrows <- sapply(XList, nrow)
+  if (length(unique(nrows)) != 1) {
+    stop("All matrices in `XList` must have the same number of rows.")
+  }
+
+  # Check types
+  allowed_types <- c("gaussian", "poisson", "binomial")
+  if (!is.character(types) || length(types) != length(XList)) {
+    stop("`types` must be a character vector with the same length as `XList`.")
+  }
+  if (!all(types %in% allowed_types)) {
+    stop(sprintf(
+      "All elements of `types` must be one of: %s",
+      paste(allowed_types, collapse = ", ")
+    ))
+  }
+
+  # Check offset
+  if (!is.logical(offset) || length(offset) != 1) {
+    stop("`offset` must be a single logical value (TRUE or FALSE).")
+  }
+
+  # Check dc_eps
+  if (!is.numeric(dc_eps) || length(dc_eps) != 1 || dc_eps <= 0) {
+    stop("`dc_eps` must be a single positive numeric value.")
+  }
+
+  # Check maxIter
+  if (!is.numeric(maxIter) || length(maxIter) != 1 || maxIter < 1 || maxIter != floor(maxIter)) {
+    stop("`maxIter` must be a single positive integer.")
+  }
+
+  # Check verbose
+  if (!is.logical(verbose) || length(verbose) != 1) {
+    stop("`verbose` must be a single logical value (TRUE or FALSE).")
+  }
+
+
   n <- nrow(XList[[1]]); p <- sum(sapply(XList, ncol))
   if(p <20) stop("ncol(X) must be at least no less than 20!")
   if(n <20) stop("nrow(X) must be at least no less than 20!")
@@ -255,7 +316,7 @@ paraIC <- function(r, XX, group, type,
   return(ICr)
 }
 
-add_identifiability <- function(H, B, mu){
+add_identifiability_old <- function(H, B, mu){
   # Load the irlba library
   #library(irlba)
 
@@ -263,7 +324,8 @@ add_identifiability <- function(H, B, mu){
 
   mu <- mu + B %*% colMeans(H)
   q <- ncol(H); n <- nrow(H)
-  svdHB <- irlba((H- matrix(colMeans(H), n, q, byrow = TRUE)) %*% t(B), nv= q)
+  Ht <- H- matrix(colMeans(H), n, q, byrow = TRUE)
+  svdHB <- irlba(Ht %*% t(B), nv= q)
   signB1 <- sign(svdHB$v[1,])
   H <- sqrt(n) * svdHB$u %*% Diag(signB1)
 
@@ -271,4 +333,25 @@ add_identifiability <- function(H, B, mu){
 
   return(list(H=H, B=B, mu=mu))
 }
+
+add_identifiability <- function(H, B, mu){
+
+
+  # Perform SVD decomposition with rank k = 10
+
+  mu <- mu + B %*% colMeans(H)
+  q <- ncol(H); n <- nrow(H)
+  Ht <- H- matrix(colMeans(H), n, q, byrow = TRUE)
+  svdH <- svd(Ht, nu=q, nv= q)
+  H1 <- svdH$u;
+  B <- B%*% svdH$v %*% Diag(svdH$d[1:q])
+  svdB <- svd(B, nu=q, nv=q)
+  rm(svdH)
+  signB1 <- sign(svdB$u[1,])
+  H <- sqrt(n) * H1 %*% svdB$v %*% Diag(signB1)
+  B <- svdB$u %*% Diag(svdB$d[1:q]*signB1) / sqrt(n)
+
+  return(list(H=H, B=B, mu=mu))
+}
+
 

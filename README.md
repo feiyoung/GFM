@@ -58,6 +58,8 @@ For an example of typical GFM usage, please see our [Package vignette](https://f
 
 
 # NEWs
+GFM version 1.2.2 (2026-01-17) Update the `add_identifiability()` function to achieve a faster implementation for large datasets.
+
 GFM version 1.2.1 (2023-08-10)
 
 The function `overdispersedGFM()` that implements the overdispersed generalized factor model is added. 
